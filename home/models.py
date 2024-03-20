@@ -13,17 +13,15 @@ from django.db import models
 #     userTime=
 #     time=models.DateField(_(""), auto_now=False, auto_now_add=False)
 #     overTime=userTime+time
-class salary(models.Model):
-    fixed_salary = models.IntegerField(null=False, blank=False)
-    var_salary = models.IntegerField(null=False, blank=False)
+class Contact(models.Model):
+    name=models.CharField(max_length=100)
+    email=models.EmailField()
+    subject=models.CharField(max_length=100)
+    message=models.TextField()
+    date=models.DateField()
+    def __str__(self):
+        return self.name
 
-class expense(models.Model):
-    fixed_expense = models.IntegerField(null=False, blank=False)
-    var_expense = models.IntegerField(null=False, blank=False)
-
-class goal(models.Model):
-    price=models.IntegerField(null=False, blank=False)
-    time=models.DateField(null=False, blank=False)
-    start_time=models.DateTimeField(auto_now_add=True, blank=False)
+    
     
     

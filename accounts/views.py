@@ -10,7 +10,7 @@ from base.emails import account_activation_email
 def index(request):
     if request.user.is_authenticated:
        return render(request, 'index.html')
-    return render(request, 'accounts/login.html')
+    return render(request, 'login.html')
 
 def loginUser(request):
     
@@ -24,19 +24,19 @@ def loginUser(request):
             messages.warning(request, "Account not Found")
             return HttpResponseRedirect(request.path_info)
         
-        if not user[0].profile.email_verified:
-            messages.warning(request, "Email not verified")
-            return HttpResponseRedirect(request.path_info)
+        # if not user[0].profile.email_verified:
+        #     messages.warning(request, "Email not verified")
+        #     return HttpResponseRedirect(request.path_info)
 
         user = authenticate(username=email, password=password)
         if user:
             login(request, user)
-            return render(request, "mainbase.html")
+            return redirect("/goal/dashboard")
         
         messages.success(request, "Invalid Credentials")
         return HttpResponseRedirect(request.path_info)
     
-    return render(request, 'accounts/login.html')
+    return render(request, 'login.html')
 
 
 def logoutUser(request):
@@ -67,18 +67,20 @@ def register(request):
         user.first_name= firstName
         user.last_name = lastName
         user.save()
+        messages.success(request, "Your Account has been Successfully Created")
+        return HttpResponseRedirect(request.path_info)
 
-        # Trigger email verification
-        try:
-            account_activation_email(email, user.profile.email_token)
-            messages.success(request, "Your Account has been Successfully Created. Check your email for verification.")
-            return HttpResponseRedirect(request.path_info)
-        except Exception as e:
-            print("Error sending activation email:", str(e))
-            messages.error(request, "Failed to send activation email.")
-            return HttpResponseRedirect(request.path_info)
+        # # Trigger email verification
+        # try:
+        #     account_activation_email(email, user.profile.email_token)
+        #     messages.success(request, "Your Account has been Successfully Created. Check your email for verification.")
+        #     return HttpResponseRedirect(request.path_info)
+        # except Exception as e:
+        #     print("Error sending activation email:", str(e))
+        #     messages.error(request, "Failed to send activation email.")
+        #     return HttpResponseRedirect(request.path_info)
         
-    return render(request, 'accounts/register.html')
+    return render(request, 'register.html')
 
 def activate_email(request , email_token):
     try:

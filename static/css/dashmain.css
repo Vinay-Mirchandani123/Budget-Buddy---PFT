@@ -1141,15 +1141,15 @@ h6 {
   border-color: #4154f1;
 }
 
-.contact .php-email-form input {
+.contact .changed input {
   padding: 10px 15px;
 }
 
-.contact .php-email-form textarea {
+.contact .changed textarea {
   padding: 12px 15px;
 }
 
-.contact .php-email-form button[type=submit] {
+.contact .changed button[type=submit] {
   background: #4154f1;
   border: 0;
   padding: 10px 30px;
@@ -1158,9 +1158,9 @@ h6 {
   border-radius: 4px;
 }
 
-.contact .php-email-form button[type=submit]:hover {
+/* .contact .php-email-form button[type=submit]:hover {
   background: #5969f3;
-}
+} */
 
 @keyframes animate-loading {
   0% {

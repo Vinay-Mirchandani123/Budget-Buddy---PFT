@@ -11,8 +11,8 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="{% static "img/favicon.png" %}" rel="icon">
-  <link href="{% static "img/apple-touch-icon.png" %}" rel="apple-touch-icon">
+  <link href="{% static "img/logo2.jpeg" %}" rel="icon">
+  <link href="{% static "img/logo2.jpeg" %}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -28,7 +28,7 @@
   <link href="{% static "vendor/simple-datatables/style.css" %}" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-  <link href="{% static "css/style.css" %}" rel="stylesheet">
+  <link href="{% static "css/dashmain.css" %}" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: NiceAdmin
@@ -50,9 +50,9 @@
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
               <div class="d-flex justify-content-center py-4">
-                <a href="{% static "index.html" %} " class="logo d-flex align-items-center w-auto">
-                  <img src="{% static "img/logo.png" %}" alt="">
-                  <span class="d-none d-lg-block">NiceAdmin</span>
+                <a href="/" class="logo d-flex align-items-center w-auto">
+                  <img src="{% static "img/logo2.jpeg" %}" alt="">
+                  <span class="d-none d-lg-block">Budget Buddy</span>
                 </a>
               </div><!-- End Logo -->
 
@@ -65,11 +65,19 @@
                     <p class="text-center small">Enter your personal details to create account</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate>
+                  <form method="post" action="/accounts/register/" class="row g-3 needs-validation" novalidate>
+                    {% csrf_token %}
+                    {% include "alert.html" %}
                     <div class="col-12">
-                      <label for="yourName" class="form-label">Your Name</label>
-                      <input type="text" name="name" class="form-control" id="yourName" required>
-                      <div class="invalid-feedback">Please, enter your name!</div>
+                      <label for="yourfirstName" class="form-label">First Name</label>
+                      <input type="text" name="firstName" class="form-control" id="yourfirstName" required>
+                      <div class="invalid-feedback">Please, enter your first name!</div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourlastName" class="form-label">Last Name</label>
+                      <input type="text" name="lastName" class="form-control" id="yourlastName" required>
+                      <div class="invalid-feedback">Please, enter your last name!</div>
                     </div>
 
                     <div class="col-12">
@@ -79,17 +87,14 @@
                     </div>
 
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Username</label>
-                      <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend">@</span>
-                        <input type="text" name="username" class="form-control" id="yourUsername" required>
-                        <div class="invalid-feedback">Please choose a username.</div>
-                      </div>
+                      <label for="yourPassword" class="form-label">Password</label>
+                      <input type="password" name="password" class="form-control" id="yourPassword" required>
+                      <div class="invalid-feedback">Please enter your password!</div>
                     </div>
 
                     <div class="col-12">
-                      <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="yourPassword" required>
+                      <label for="yourconPassword" class="form-label">Confirm Password</label>
+                      <input type="password" name="conpassword" class="form-control" id="yourconPassword" required>
                       <div class="invalid-feedback">Please enter your password!</div>
                     </div>
 
@@ -104,7 +109,7 @@
                       <button class="btn btn-primary w-100" type="submit">Create Account</button>
                     </div>
                     <div class="col-12">
-                      <p class="small mb-0">Already have an account? <a href="pages-login.html">Log in</a></p>
+                      <p class="small mb-0">Already have an account? <a href="/accounts/login">Log in</a></p>
                     </div>
                   </form>
 
@@ -116,7 +121,6 @@
                 <!-- You can delete the links only if you purchased the pro version. -->
                 <!-- Licensing information: https://bootstrapmade.com/license/ -->
                 <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
               </div>
 
             </div>
@@ -141,7 +145,7 @@
   <script src="{% static "vendor/php-email-form/validate.js" %}"></script>
 
   <!-- Template Main JS File -->
-  <script src="{% static "js/main.js" %}"></script>
+  <script src="{% static "js/dashmain.js" %}"></script>
 
 </body>
 

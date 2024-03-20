@@ -41,6 +41,9 @@ from .serializers import *
 #     }
 
 #     return render(request, "mainbase.html", context)
+def dashboard(request):
+    return render(request, "dashboard.html")
+
 def progress(request):
     # Retrieve data from models
     goals = Goal.objects.filter(user=request.user)
