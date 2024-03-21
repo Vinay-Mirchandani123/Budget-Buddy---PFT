@@ -208,24 +208,19 @@ def goal(request,username):
         goalDeadline = request.POST["goalDeadline"]
         user = username
         start_time=datetime.today()
-<<<<<<< HEAD
-        
-=======
         year=start_time.year
         month=start_time.month
         day=start_time.day
         time = year * 100 + month
->>>>>>> 8036cabd0aead71d6d037c2ba38a0b01c9ebdf0c
+
         achieve = Goal(
             user=user,
             goal_name=goal_name,
             amount=amount,
             goalDeadline=goalDeadline,
             start_time=start_time,
-<<<<<<< HEAD
-=======
             time=time
->>>>>>> 8036cabd0aead71d6d037c2ba38a0b01c9ebdf0c
+
         )
         achieve.save()
         messages.success(request, "goal entered successfully")
