@@ -32,7 +32,7 @@
         var myChart = new Chart(ctx, {
                     type: 'line',
                     data: {
-                      labels: {{ salary_labels|safe }},
+                      labels: {{ sal_time|safe }},
                 datasets: [{
                     label: 'salary',
                     data: {{ salary_var|safe }},

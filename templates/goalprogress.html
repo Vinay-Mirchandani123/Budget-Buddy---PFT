@@ -28,11 +28,13 @@
               <canvas id="lineChart" style="max-height: 400px;"></canvas>
               <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
               <script>
+                
+                var label={{goal_time|safe}}
                 var ctx = document.getElementById('lineChart').getContext('2d');
         var myChart = new Chart(ctx, {
                     type: 'line',
                     data: {
-                      labels: {{ goal_labels|safe }},
+                      labels: time.map(date => new Date(date).toLocaleDateString()),
                 datasets: [{
                     label: 'Goal Amount',
                     data: {{ goal_amounts|safe }},
@@ -45,13 +47,8 @@
                       scales: {
                         y: {
                           beginAtZero: true
-                        }, 
-                        x: {
-                          type: 'time',
-                          time: {
-                              unit: 'day'
-                          }
-                      }
+                        },
+                      
                       }
                     }
                   });
@@ -72,11 +69,12 @@
               <canvas id="barChart" style="max-height: 400px;"></canvas>
               <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
               <script>
+                var label= {{ goal_labels|safe }}
                 var ctx = document.getElementById('barChart').getContext('2d');
                 var myChart = new Chart(ctx, {
                     type: 'bar',
                       data: {
-                        labels: {{ goal_labels|safe }},
+                        labels: label,
                         datasets: [{
                             label: 'Goal Amount',
                             data:{{ goal_amounts|safe }} ,
