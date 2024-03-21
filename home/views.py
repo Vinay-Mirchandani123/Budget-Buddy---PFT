@@ -10,6 +10,9 @@ from django.http import HttpResponseRedirect
 def index(request):
     return render(request, 'index.html')
 
+def faqs(request):
+    return render(request, "faqs.html")
+
 
 
 def contact(request):

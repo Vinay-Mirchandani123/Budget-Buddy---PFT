@@ -17,7 +17,7 @@
     <p>Chart.JS Examples. You can check the <a href="https://www.chartjs.org/docs/latest/samples/" target="_blank">official website</a> for more examples.</p> {% endcomment %}
     <div class="container">
         <section id="expense">
-            <h2>Salary Information</h2>
+            <h2>Expense Information</h2>
             <form id="expenseForm" method="post" action="/goal/expense/{{ user.username }}/">
                 {% csrf_token %}
                 {% include "alert.html" %}
