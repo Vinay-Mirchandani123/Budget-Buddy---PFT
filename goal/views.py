@@ -56,12 +56,12 @@ def goalprogress(request):
     
     goal_labels = [goal.goal_name for goal in goals]
     goal_amounts = [goal.amount for goal in goals]
-    goal_time=[goal.goalDeadline for goal in goals]
+    goal_time=[goal.start_time for goal in goals]
     # Pass data to the template
     context = {
         'goal_labels': goal_labels,
         'goal_amounts': goal_amounts, 
-        'goal_time': goal_time, 
+        'goal_time': goal_time
     }
 
     return render(request, "goalprogress.html",context)
@@ -73,11 +73,13 @@ def expenseprogress(request):
     expense_labels = [expense.exp_name for expense in expenses]
     expense_fix = [expense.fix_expense for expense in expenses]
     expense_var = [expense.var_expense for expense in expenses]
+    exp_time=[expense.start_time for expense in expenses]
     # Pass data to the template
     context = {
         'expense_labels': expense_labels,
         'expense_fix': expense_fix,
         'expense_var': expense_var,
+        'exp_time':exp_time
     }
 
     return render(request, "expenseprogress.html", context)
@@ -89,12 +91,14 @@ def incomeprogress(request):
     salary_labels = [salary.sal_name for salary in salaries]
     salary_var = [salary.var_salary for salary in salaries]
     salary_fix = [salary.fix_salary for salary in salaries]
+    sal_time=[salary.start_time for salary in salaries]
     # Pass data to the template
     context = {
         
         'salary_labels': salary_labels,
         'salary_var': salary_var,
         'salary_fix': salary_fix,
+        'sal_time':sal_time
     }
 
     return render(request, "incomeprogress.html", context)
@@ -162,10 +166,11 @@ def mainprogress(request):
 
 def salary(request, username):
     if request.method == "POST":
+        sal_name=request.POST['sal_name']
         fix_salary = request.POST["fix_salary"]
         var_salary = request.POST["var_salary"]
         user = username
-        income = Salary(user=user,fix_salary=fix_salary, var_salary=var_salary)
+        income = Salary(sal_name=sal_name,user=user,fix_salary=fix_salary, var_salary=var_salary,start_time=datetime.today())
         income.save()
         messages.success(request, "salary entered successfully")
 
@@ -179,7 +184,7 @@ def expense(request,username):
         var_expense = request.POST["var_expense"]
         user = username
         kharcha = Expense(
-           user=user, exp_name=exp_name, fix_expense=fix_expense, var_expense=var_expense
+           user=user, exp_name=exp_name, fix_expense=fix_expense, var_expense=var_expense,start_time=datetime.today()
         )
         kharcha.save()
         messages.success(request, "expense entered successfully")
@@ -197,7 +202,7 @@ def goal(request,username):
             goal_name=goal_name,
             amount=amount,
             goalDeadline=goalDeadline,
-            start_time=datetime.today(),
+            start_time=datetime.today()
         )
         achieve.save()
         messages.success(request, "goal entered successfully")

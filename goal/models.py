@@ -7,6 +7,7 @@ class Salary(models.Model):
     sal_name = models.CharField(max_length=100,null=False, blank=False)
     fix_salary = models.IntegerField(null=False, blank=False)
     var_salary = models.IntegerField(null=False, blank=False)
+    start_time=models.DateField(null=True, blank=True)
     
     # def __str__(self):
     #     return self.name
@@ -17,6 +18,7 @@ class Expense(models.Model):
     exp_name = models.CharField(max_length=100,null=False, blank=False)
     fix_expense = models.IntegerField(null=False, blank=False)
     var_expense = models.IntegerField(null=False, blank=False)
+    start_time=models.DateField(null=True, blank=True)
     # def __str__(self):
     #     return self.name
 
@@ -26,7 +28,7 @@ class Goal(models.Model):
     amount=models.IntegerField(null=False, blank=False)
     goalDeadline=models.DateField(null=False, blank=False)
     
-    start_time=models.DateField()
+    start_time=models.DateField(null=True, blank=True)
 
     # def __str__(self):
     #     return self.name
