@@ -44,7 +44,7 @@
                     options: {
                       scales: {
                         y: {
-                          beginAtZero: true
+                                                    beginAtZero: true
                         }
                       }
                     }
@@ -73,7 +73,7 @@
                         labels: {{ goal_labels|safe }},
                         datasets: [{
                             label: 'Goal Amount',
-                            data: {{ goal_amounts|safe }},
+                            data:{{ goal_amounts|safe }} ,
                         backgroundColor: [
                           'rgba(255, 99, 132, 0.2)',
                           'rgba(255, 159, 64, 0.2)',
@@ -99,7 +99,11 @@
                       scales: {
                         y: {
                           beginAtZero: true
+                        },
+                        x:{
+                          beginAtZero: true
                         }
+
                       }
                     }
                   });

@@ -56,13 +56,15 @@ def goalprogress(request):
     
     goal_labels = [goal.goal_name for goal in goals]
     goal_amounts = [goal.amount for goal in goals]
+    goal_time=[goal.goalDeadline for goal in goals]
     # Pass data to the template
     context = {
         'goal_labels': goal_labels,
-        'goal_amounts': goal_amounts,   
+        'goal_amounts': goal_amounts, 
+        'goal_time': goal_time, 
     }
 
-    return render(request, "goalprogress.html", context)
+    return render(request, "goalprogress.html",context)
 
 def expenseprogress(request):
     expenses = Expense.objects.filter(user=request.user)
@@ -99,19 +101,8 @@ def incomeprogress(request):
 
 def mainprogress(request):
     # Retrieve data from models
-    goals = Goal.objects.filter(user=request.user)
-    # Prepare data for chart
-    # goals_labels = []
-    # remaining_amounts = []
-    
-    # today = datetime.now().date()
-    
-    # # for goal in goals:
-    # #     remaining_amount = goal.remaining_amount
-    # #     last_updated = goal.last_updated.date()
-
-    # #     while last_updated <= today:
-    # #         goals_labels.append(last_updated.strftime('%Y-%m-%d'))
+    goals = Goal.objects.filter(user=request.user)# #
+    ##goals_labels.append(last_updated.strftime('%Y-%m-%d'))
     # #         remaining_amounts.append(remaining_amount)
 
     # #         # Increment date by 15 days

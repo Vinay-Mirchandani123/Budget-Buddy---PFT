@@ -27,6 +27,7 @@ class Goal(models.Model):
     goalDeadline=models.DateField(null=False, blank=False)
     
     start_time=models.DateField()
+
     # def __str__(self):
     #     return self.name
 
