@@ -1,0 +1,437 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+  <main id="main" class="main">
+
+    {% comment %} <div class="pagetitle">
+      <h1>Chart.js</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item">Charts</li>
+          <li class="breadcrumb-item active">Chart.js</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <p>Chart.JS Examples. You can check the <a href="https://www.chartjs.org/docs/latest/samples/" target="_blank">official website</a> for more examples.</p> {% endcomment %}
+
+    <section class="section">
+      <div class="row">
+
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Line Chart</h5>
+
+              <!-- Line Chart -->
+              <canvas id="lineChart" style="max-height: 400px;"></canvas>
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <script>
+                var ctx = document.getElementById('lineChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                      labels: {{ expense_labels|safe }},
+                datasets: [{
+                    label: 'expense',
+                    data: {{ expense_fix|safe }},
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                      },{
+                        label: 'var sal',
+                        data: {{ expense_var|safe }},
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                      }
+                      ]
+                    },
+                    options: {
+                      scales: {
+                        y: {
+                          beginAtZero: true
+                        }
+                      }
+                    }
+                  });
+
+              </script>
+              <!-- End Line CHart -->
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Bar CHart</h5>
+
+              <!-- Bar Chart -->
+              <canvas id="barChart" style="max-height: 400px;"></canvas>
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <script>
+                var ctx = document.getElementById('barChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                      data: {
+                        labels: {{ expense_labels|safe }},
+                        datasets: [{
+                            label: 'expense',
+                            data: {{ expense_fix|safe }},
+                        backgroundColor: [
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(255, 159, 64, 0.2)',
+                          'rgba(255, 205, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(201, 203, 207, 0.2)'
+                        ],
+                        borderColor: [
+                          'rgb(255, 99, 132)',
+                          'rgb(255, 159, 64)',
+                          'rgb(255, 205, 86)',
+                          'rgb(75, 192, 192)',
+                          'rgb(54, 162, 235)',
+                          'rgb(153, 102, 255)',
+                          'rgb(201, 203, 207)'
+                        ],
+                        borderWidth: 1
+                      },{
+                        label: 'var sal',
+                        data: {{ expense_var|safe }},
+                        backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)'
+                      ],
+                      borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
+                      ],
+                      borderWidth: 1
+
+                      }
+                      ]
+                    },
+                    options: {
+                      scales: {
+                        y: {
+                          beginAtZero: true
+                        }
+                      }
+                    }
+                  });
+          
+              </script>
+              <!-- End Bar CHart -->
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Pie Chart</h5>
+
+              <!-- Pie Chart -->
+              <canvas id="pieChart" style="max-height: 400px;"></canvas>
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <script>
+                var ctx = document.getElementById('pieChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                      labels: {{ expense_labels|safe }},
+                datasets: [{
+                    label: 'expense',
+                    data: {{ expense_fix|safe }},
+                        backgroundColor: [
+                          'rgb(255, 99, 132)',
+                          'rgb(54, 162, 235)',
+                          'rgb(255, 205, 86)'
+                        ],
+                        hoverOffset: 4
+                      },{
+                        label: 'var sal',
+                        data: {{ expense_var|safe }},
+                        backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 205, 86)'
+                      ],
+                      hoverOffset: 4
+                      }
+                      ]
+                    }
+                  });
+     
+              </script>
+              <!-- End Pie CHart -->
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Doughnut Chart</h5>
+
+              <!-- Doughnut Chart -->
+              <canvas id="doughnutChart" style="max-height: 400px;"></canvas>
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <script>
+                var ctx = document.getElementById('doughnutChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                      labels: {{ expense_labels|safe }},
+                datasets: [{
+                    label: 'expense',
+                    data: {{ expense_fix|safe }},
+                        backgroundColor: [
+                          'rgb(255, 99, 132)',
+                          'rgb(54, 162, 235)',
+                          'rgb(255, 205, 86)'
+                        ],
+                        hoverOffset: 4
+                      },{
+                        label: 'var sal',
+                        data: {{ expense_var|safe }},
+                        backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 205, 86)'
+                      ],
+                      hoverOffset: 4
+
+                      }]
+                    }
+                  });
+     
+              </script>
+              <!-- End Doughnut CHart -->
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Radar Chart</h5>
+
+              <!-- Radar Chart -->
+              <canvas id="radarChart" style="max-height: 400px;"></canvas>
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <script>
+                var ctx = document.getElementById('radarChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                      labels: {{ expense_labels|safe }},
+                datasets: [{
+                    label: 'expense',
+                    data: {{ expense_fix|safe }},
+                        fill: true,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        pointBackgroundColor: 'rgb(255, 99, 132)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(255, 99, 132)'
+                      }, {
+                        label: 'var sal',
+                        data: {{ expense_var|safe }},
+                        fill: true,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgb(54, 162, 235)',
+                        pointBackgroundColor: 'rgb(54, 162, 235)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(54, 162, 235)'
+                      }]
+                    },
+                    options: {
+                      elements: {
+                        line: {
+                          borderWidth: 3
+                        }
+                      }
+                    }
+                  });
+      
+              </script>
+              <!-- End Radar CHart -->
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Polar Area Chart</h5>
+
+              <!-- Polar Area Chart -->
+              <canvas id="polarAreaChart" style="max-height: 400px;"></canvas>
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <script>
+                var ctx = document.getElementById('polarAreaChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'polarArea',
+                    data: {
+                      labels: {{ expense_labels|safe }},
+                      datasets: [{
+                          label: 'expense',
+                          data: {{ expense_fix|safe }},
+                        backgroundColor: [
+                          'rgb(255, 99, 132)',
+                          'rgb(75, 192, 192)',
+                          'rgb(255, 205, 86)',
+                          'rgb(201, 203, 207)',
+                          'rgb(54, 162, 235)'
+                        ]
+                      },
+                      {
+                        label: 'var sal',
+                        data: {{ expense_var|safe }},
+                        backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(75, 192, 192)',
+                        'rgb(255, 205, 86)',
+                        'rgb(201, 203, 207)',
+                        'rgb(54, 162, 235)'
+                      ]
+
+                      }]
+                    }
+                  });
+             
+              </script>
+              <!-- End Polar Area Chart -->
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Stacked Bar Chart</h5>
+
+              <!-- Stacked Bar Chart -->
+              <canvas id="stakedBarChart" style="max-height: 400px;"></canvas>
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <script>
+                var ctx = document.getElementById('stakedBarChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: {{ expense_labels|safe }},
+                      datasets: [{
+                          label: 'expense',
+                          data: {{ expense_fix|safe }},
+                          backgroundColor: 'rgb(255, 99, 132)',
+                        },
+                        {
+                          label: 'var sal',
+                        data: {{ expense_var|safe }},
+                          backgroundColor: 'rgb(75, 192, 192)',
+                        }
+                      ]
+                    },
+                    options: {
+                      plugins: {
+                        title: {
+                          display: true,
+                          text: 'Chart.js Bar Chart - Stacked'
+                        },
+                      },
+                      responsive: true,
+                      scales: {
+                        x: {
+                          stacked: true,
+                        },
+                        y: {
+                          stacked: true
+                        }
+                      }
+                    }
+                  });
+           
+              </script>
+              <!-- End Stacked Bar Chart -->
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Bubble Chart</h5>
+
+              <!-- Bubble Chart -->
+              <canvas id="bubbleChart" style="max-height: 400px;"></canvas>
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <script>
+                var ctx = document.getElementById('bubbleChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bubble',
+                    data: {
+                      labels: {{ expense_labels|safe }},
+                datasets: [{
+                    label: 'expense',
+                    data: {{ expense_fix|safe }},
+                          borderColor: 'rgb(255, 99, 132)',
+                          backgroundColor: 'rgba(255, 99, 132, 0.5)'
+                        },
+                        {
+                          label: 'var sal',
+                        data: {{ expense_var|safe }},
+                          borderColor: 'rgb(75, 192, 192)',
+                          backgroundColor: 'rgba(75, 192, 192, 0.5)'
+                        }
+                      ]
+                    },
+                    options: {
+                      responsive: true,
+                      plugins: {
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Chart.js Bubble Chart'
+                        }
+                      }
+                    }
+                  });
+          
+              </script>
+              <!-- End Bubble Chart -->
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+{% endblock body%}

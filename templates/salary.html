@@ -1,20 +1,46 @@
 {% extends "base.html" %}
+{% load static %}
 {% block body %}
-<div class="container">
-    <section id="salary">
-        <h2>Salary Information</h2>
-        <form id="salaryForm" method="post" action="/goal/salary/{{user.username}}/">
-            {% csrf_token %}
-            {% include "alert.html" %}
-            <label for="goalName">Salary name:</label>
-        <input type="text" id="sal_name" name="sal_name" required>
-            <label for="salaryAmount">Fixed Salary(in Rs):</label>
-            <input type="number" id="fix_salary" name="fix_salary" required>
-            <label for="salaryAmount" >Variable Salary(in Rs):</label>
-            <input type="number" id="var_salary" name="var_salary" required>
+<main id="main" class="main">
 
-            <button type="submit">Submit Salary</button>
-        </form>
-    </section>
-</div>
+    {% comment %} <div class="pagetitle">
+      <h1></h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html"></a></li>
+          <li class="breadcrumb-item"></li>
+          <li class="breadcrumb-item active"></li>
+        </ol>
+      </nav>
+    </div> {% endcomment %}
+
+    {% comment %} <p></p> {% endcomment %}
+    <div class="container">
+        <section id="salary">
+            <h2>Salary Information</h2>
+            <form id="salaryForm" method="post" action="/goal/salary/{{ user.username }}/">
+                {% csrf_token %}
+                {% include "alert.html" %}
+                <!-- Salary Name Input -->
+                <div class="form-group">
+                    <label for="sal_name">Salary Name:</label>
+                    <input type="text" id="sal_name" name="sal_name" class="form-control" required>
+                </div>
+                <!-- Fixed Salary Input -->
+                <div class="form-group">
+                    <label for="fix_salary">Fixed Salary (in Rs):</label>
+                    <input type="number" id="fix_salary" name="fix_salary" class="form-control" required>
+                </div>
+                <!-- Variable Salary Input -->
+                <div class="form-group">
+                    <label for="var_salary">Variable Salary (in Rs):</label>
+                    <input type="number" id="var_salary" name="var_salary" class="form-control" required>
+                </div>
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary">Submit Salary</button>
+            </form>
+        </section>
+    </div><!-- End Container -->
+
+</main>
 {% endblock body %}

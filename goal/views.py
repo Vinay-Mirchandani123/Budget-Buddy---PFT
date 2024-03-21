@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from django.views import View
 from .models import *
 from .serializers import *
+from datetime import datetime, timedelta
 
 # from .models import Profile
 
@@ -41,37 +42,131 @@ from .serializers import *
 #     }
 
 #     return render(request, "mainbase.html", context)
+
+
+
 def dashboard(request):
     return render(request, "dashboard.html")
 
-def progress(request):
+def goalprogress(request):
     # Retrieve data from models
     goals = Goal.objects.filter(user=request.user)
-    salaries = Salary.objects.filter(user=request.user)
-    expenses = Expense.objects.filter(user=request.user)
+    
     # Prepare data for chart
+    
     goal_labels = [goal.goal_name for goal in goals]
     goal_amounts = [goal.amount for goal in goals]
+    # Pass data to the template
+    context = {
+        'goal_labels': goal_labels,
+        'goal_amounts': goal_amounts,   
+    }
+
+    return render(request, "goalprogress.html", context)
+
+def expenseprogress(request):
+    expenses = Expense.objects.filter(user=request.user)
+    # Prepare data for chart
+    
     expense_labels = [expense.exp_name for expense in expenses]
     expense_fix = [expense.fix_expense for expense in expenses]
     expense_var = [expense.var_expense for expense in expenses]
+    # Pass data to the template
+    context = {
+        'expense_labels': expense_labels,
+        'expense_fix': expense_fix,
+        'expense_var': expense_var,
+    }
+
+    return render(request, "expenseprogress.html", context)
+
+def incomeprogress(request):
+    # Retrieve data from models
+    
+    salaries = Salary.objects.filter(user=request.user)
     salary_labels = [salary.sal_name for salary in salaries]
     salary_var = [salary.var_salary for salary in salaries]
     salary_fix = [salary.fix_salary for salary in salaries]
     # Pass data to the template
     context = {
-        'goal_labels': goal_labels,
-        'goal_amounts': goal_amounts,
-        'expense_labels': expense_labels,
-        'expense_fix': expense_fix,
-        'expense_var': expense_var,
+        
         'salary_labels': salary_labels,
         'salary_var': salary_var,
         'salary_fix': salary_fix,
-        
     }
 
-    return render(request, "progress.html", context)
+    return render(request, "incomeprogress.html", context)
+
+def mainprogress(request):
+    # Retrieve data from models
+    goals = Goal.objects.filter(user=request.user)
+    # Prepare data for chart
+    # goals_labels = []
+    # remaining_amounts = []
+    
+    # today = datetime.now().date()
+    
+    # # for goal in goals:
+    # #     remaining_amount = goal.remaining_amount
+    # #     last_updated = goal.last_updated.date()
+
+    # #     while last_updated <= today:
+    # #         goals_labels.append(last_updated.strftime('%Y-%m-%d'))
+    # #         remaining_amounts.append(remaining_amount)
+
+    # #         # Increment date by 15 days
+    # #         last_updated += timedelta(days=15)
+    # context = {
+    #     'goals_labels': goals_labels,
+    #     'remaining_amounts': remaining_amounts,    
+    # }
+
+    # return render(request, "mainprogress.html", context)
+    goal_labels = [goal.goal_name for goal in goals]
+    goal_amounts = [goal.amount for goal in goals]
+    # Pass data to the template
+    context = {
+        'goal_labels': goal_labels,
+        'goal_amounts': goal_amounts,   
+    }
+
+    return render(request, "goalprogress.html", context)
+
+# goal/views.py
+
+
+
+# def goal_chart(request):
+#     # Fetch all goals for the current user
+#     goals = Goal.objects.filter(user=request.user)
+
+#     # Initialize data lists for chart
+#     labels = []  # Labels for x-axis (dates)
+#     remaining_amounts = []  # Remaining amounts for each goal
+
+#     # Get today's date
+#     today = datetime.now().date()
+
+    # Loop through each goal and calculate remaining amount every 15 days
+    # for goal in goals:
+        # remaining_amount = goal.remaining_amount
+        # last_updated = goal.last_updated.date()
+
+        # while last_updated <= today:
+        #     labels.append(last_updated.strftime('%Y-%m-%d'))
+        #     remaining_amounts.append(remaining_amount)
+
+        #     # Increment date by 15 days
+        #     last_updated += timedelta(days=15)
+
+#     # Pass data to the template
+#     context = {
+#         'labels': labels,
+#         'remaining_amounts': remaining_amounts,
+#     }
+
+#     return render(request, 'goal_chart.html', context)
+
 
 
 def salary(request, username):
