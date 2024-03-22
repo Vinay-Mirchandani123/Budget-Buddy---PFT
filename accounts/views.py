@@ -3,10 +3,11 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout,get_user
 from django.contrib import messages
-from .models import Profile
+from .models import Profile,Editprofile
 from base.emails import account_activation_email
 
 # Create your views here.
+
 def index(request):
     if request.user.is_authenticated:
        return render(request, 'index.html')
@@ -91,3 +92,44 @@ def activate_email(request , email_token):
         return redirect('/accounts/login')
     except Exception as e:
         return HttpResponse('Invalid Email token')
+
+def editprofile(request):
+    
+    
+#     profileimage= request.POST['profileimage']
+     about= request.POST['about']
+#     country= request.POST['country']
+#     address= request.POST['address']
+#     facebook= request.POST['facebook']
+#     job= request.POST['job']
+#     phone= request.POST['phone']
+#     twitter= request.POST['twitter']
+#     instagram= request.POST['instagram']
+#     linkedin= request.POST['linkedin']
+#     lastname=request.POST['lastname']
+#     email=request.POST['email']
+#     namefirst=request.POST['namefirst']
+    
+    
+    # user = User.objects.filter(username = email)
+    
+    # # user.firstName = firstname
+    # # user.lastName = lastname
+    # # user.email = email
+    
+    # Editprofile(
+    # namefirst=namefirst,
+    # lastname=lastname,
+    # email=email,
+    # profileimage=profileimage, 
+    # about= about,
+    # country= country,
+    # address= address,
+    # facebook= facebook,
+    # job= job,
+    # phone= phone,
+    # twitter= twitter,
+    # instagram= instagram,
+    # linkedin= linkedin,
+    # )
+     return render(request, "userprofile.html")

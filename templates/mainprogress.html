@@ -2,8 +2,8 @@
 {% load static %}
 {% block body %}
   <main id="main" class="main">
-
-    {% comment %} <div class="pagetitle">
+{% comment %} 
+    <div class="pagetitle">
       <h1>Chart.js</h1>
       <nav>
         <ol class="breadcrumb">
@@ -30,27 +30,44 @@
               <script>
                 var ctx = document.getElementById('lineChart').getContext('2d');
                 var myChart = new Chart(ctx, {
-                  type: 'line',
-                  data: {
-                      labels: {{ goals_labels|safe }},
+                    type: 'line',
+                    data: {
+                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)'],
                       datasets: [{
-                        label: 'Goal Amount',
-                        data: {{ remaining_amounts|safe }},
-                        fill: false,
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
+                          label: 'Values',
+                          data: [
+                              {{ total_goal_amount }},
+                              {{ salary_fix_total }},
+                              {{ salary_var_total }},
+                              {{ expense_fix_total }},
+                              {{ expense_var_total }}
+                          ],
+                          backgroundColor: [
+                              'rgba(255, 99, 132, 0.5)',
+                              'rgba(54, 162, 235, 0.5)',
+                              'rgba(255, 205, 86, 0.5)',
+                              'rgba(75, 192, 192, 0.5)',
+                              'rgba(153, 102, 255, 0.5)'
+                          ],
+                          borderColor: [
+                              'rgba(255, 99, 132, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(255, 205, 86, 1)',
+                              'rgba(75, 192, 192, 1)',
+                              'rgba(153, 102, 255, 1)'
+                          ],
+                          borderWidth: 1
                       }]
-                    },
-                    options: {
+                  },
+                  options: {
                       scales: {
-                        y: {
-                          beginAtZero: true
-                        }
+                          y: {
+                              beginAtZero: true
+                          }
                       }
-                    }
-                  });
-
-              </script>
+                  }
+              });
+          </script>
               <!-- End Line CHart -->
 
             </div>
@@ -63,48 +80,99 @@
               <h5 class="card-title">Bar CHart</h5>
 
               <!-- Bar Chart -->
-              <canvas id="barChart" style="max-height: 400px;"></canvas>
+              {% comment %} <canvas id="barChart" style="max-height: 400px;"></canvas>
               <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
               <script>
+                var label= {{ goal_time|safe }}
                 var ctx = document.getElementById('barChart').getContext('2d');
                 var myChart = new Chart(ctx, {
                     type: 'bar',
-                    data: {
-                      labels: {{ goals_labels|safe }},
-                      datasets: [{
-                          label: 'Goal Amount',
-                          data: {{ remaining_amounts|safe }},
-                          backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(255, 159, 64, 0.2)',
-                            'rgba(255, 205, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(201, 203, 207, 0.2)'
-                          ],
-                          borderColor: [
-                            'rgb(255, 99, 132)',
-                            'rgb(255, 159, 64)',
-                            'rgb(255, 205, 86)',
-                            'rgb(75, 192, 192)',
-                            'rgb(54, 162, 235)',
-                            'rgb(153, 102, 255)',
-                            'rgb(201, 203, 207)'
-                          ],
-                          borderWidth: 1
+                      data: {
+                        labels: label,
+                        datasets: [{
+                            label: 'Goal Amount',
+                            data:{{ goal_amounts|safe }} ,
+                        backgroundColor: [
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(255, 159, 64, 0.2)',
+                          'rgba(255, 205, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(201, 203, 207, 0.2)'
+                        ],
+                        borderColor: [
+                          'rgb(255, 99, 132)',
+                          'rgb(255, 159, 64)',
+                          'rgb(255, 205, 86)',
+                          'rgb(75, 192, 192)',
+                          'rgb(54, 162, 235)',
+                          'rgb(153, 102, 255)',
+                          'rgb(201, 203, 207)'
+                        ],
+                        borderWidth: 1
                       }]
                     },
                     options: {
                       scales: {
                         y: {
                           beginAtZero: true
+                        },
+                        x:{
+                          beginAtZero: true
                         }
+
                       }
                     }
-                });
-              </script>
+                  });
+                
+              </script> {% endcomment %}
+              <canvas id="barChart" style="max-height: 400px;"></canvas>
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <script>
+              var ctx = document.getElementById('barChart').getContext('2d');
+              var barChart = new Chart(ctx, {
+                  type: 'bar',
+                  data: {
+                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)','saving'],
+                      datasets: [{
+                          label: 'Values',
+                          data: [
+                              {{ total_goal_amount }},
+                              {{ salary_fix_total }},
+                              {{ salary_var_total }},
+                              {{ expense_fix_total }},
+                              {{ expense_var_total }},
+                              {{savings}}
+                          ],
+                          backgroundColor: [
+                              'rgba(255, 99, 132, 0.5)',
+                              'rgba(54, 162, 235, 0.5)',
+                              'rgba(255, 205, 86, 0.5)',
+                              'rgba(75, 192, 192, 0.5)',
+                              'rgba(153, 102, 255, 0.5)'
+                          ],
+                          borderColor: [
+                              'rgba(255, 99, 132, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(255, 205, 86, 1)',
+                              'rgba(75, 192, 192, 1)',
+                              'rgba(153, 102, 255, 1)'
+                          ],
+                          borderWidth: 1
+                      }]
+                  },
+                  options: {
+                      scales: {
+                          y: {
+                              beginAtZero: true
+                          }
+                      }
+                  }
+              });
+          </script>
               <!-- End Bar CHart -->
+              
 
             </div>
           </div>
@@ -121,25 +189,39 @@
               <script>
                 var ctx = document.getElementById('pieChart').getContext('2d');
                 var myChart = new Chart(ctx, {
-                  type: 'pie',
-                  data: {
-                      labels: {{ goals_labels|safe }},
+                    type: 'pie',
+                    data: {
+                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)'],
                       datasets: [{
-                          label: 'Goal Amount',
-                          data: {{ remaining_amounts|safe }},
-                          backgroundColor: [
-                              'rgb(255, 99, 132)',
-                              'rgb(54, 162, 235)',
-                              'rgb(255, 205, 86)'
+                          label: 'Values',
+                          data: [
+                              {{ total_goal_amount }},
+                              {{ salary_fix_total }},
+                              {{ salary_var_total }},
+                              {{ expense_fix_total }},
+                              {{ expense_var_total }}
                           ],
-                          hoverOffset: 4,
+                          backgroundColor: [
+                              'rgba(255, 99, 132, 0.5)',
+                              'rgba(54, 162, 235, 0.5)',
+                              'rgba(255, 205, 86, 0.5)',
+                              'rgba(75, 192, 192, 0.5)',
+                              'rgba(153, 102, 255, 0.5)'
+                          ],
+                          borderColor: [
+                              'rgba(255, 99, 132, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(255, 205, 86, 1)',
+                              'rgba(75, 192, 192, 1)',
+                              'rgba(153, 102, 255, 1)'
+                          ],
                           borderWidth: 1
                       }]
                   },
                   options: {
-                      elements: {
-                          line: {
-                              borderWidth: 3
+                      scales: {
+                          y: {
+                              beginAtZero: true
                           }
                       }
                   }
@@ -164,28 +246,42 @@
         var myChart = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                      labels: {{ goals_labels|safe }},
+                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)'],
                       datasets: [{
-                        label: 'Goal Amount',
-                    data: {{ remaining_amounts|safe }},
-                        backgroundColor: [
-                          'rgb(255, 99, 132)',
-                          'rgb(54, 162, 235)',
-                          'rgb(255, 205, 86)'
-                        ],
-                        hoverOffset: 4
+                          label: 'Values',
+                          data: [
+                              {{ total_goal_amount }},
+                              {{ salary_fix_total }},
+                              {{ salary_var_total }},
+                              {{ expense_fix_total }},
+                              {{ expense_var_total }}
+                          ],
+                          backgroundColor: [
+                              'rgba(255, 99, 132, 0.5)',
+                              'rgba(54, 162, 235, 0.5)',
+                              'rgba(255, 205, 86, 0.5)',
+                              'rgba(75, 192, 192, 0.5)',
+                              'rgba(153, 102, 255, 0.5)'
+                          ],
+                          borderColor: [
+                              'rgba(255, 99, 132, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(255, 205, 86, 1)',
+                              'rgba(75, 192, 192, 1)',
+                              'rgba(153, 102, 255, 1)'
+                          ],
+                          borderWidth: 1
                       }]
-                    },
-                    options: {
-                      elements: {
-                        line: {
-                          borderWidth: 3
-                        }
+                  },
+                  options: {
+                      scales: {
+                          y: {
+                              beginAtZero: true
+                          }
                       }
-                    }
-                  });
-
-              </script>
+                  }
+              });
+          </script>
               <!-- End Doughnut CHart -->
 
             </div>
@@ -205,39 +301,42 @@
                 var myChart = new Chart(ctx, {
                     type: 'radar',
                     data: {
-                      labels: {{ goals_labels|safe }},
+                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)'],
                       datasets: [{
-                        label: 'Goal Amount',
-                    data: {{ remaining_amounts|safe }},
-                        fill: true,
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgb(255, 99, 132)',
-                        pointBackgroundColor: 'rgb(255, 99, 132)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(255, 99, 132)'
-                      }, {
-                        label: 'kaam krna h isme',
-                        data: [28, 48, 40, 19, 96, 27, 100],
-                        fill: true,
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgb(54, 162, 235)',
-                        pointBackgroundColor: 'rgb(54, 162, 235)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(54, 162, 235)'
+                          label: 'Values',
+                          data: [
+                              {{ total_goal_amount }},
+                              {{ salary_fix_total }},
+                              {{ salary_var_total }},
+                              {{ expense_fix_total }},
+                              {{ expense_var_total }}
+                          ],
+                          backgroundColor: [
+                              'rgba(255, 99, 132, 0.5)',
+                              'rgba(54, 162, 235, 0.5)',
+                              'rgba(255, 205, 86, 0.5)',
+                              'rgba(75, 192, 192, 0.5)',
+                              'rgba(153, 102, 255, 0.5)'
+                          ],
+                          borderColor: [
+                              'rgba(255, 99, 132, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(255, 205, 86, 1)',
+                              'rgba(75, 192, 192, 1)',
+                              'rgba(153, 102, 255, 1)'
+                          ],
+                          borderWidth: 1
                       }]
-                    },
-                    options: {
-                      elements: {
-                        line: {
-                          borderWidth: 3
-                        }
+                  },
+                  options: {
+                      scales: {
+                          y: {
+                              beginAtZero: true
+                          }
                       }
-                    }
-                  });
-
-              </script>
+                  }
+              });
+          </script>
               <!-- End Radar CHart -->
 
             </div>
@@ -257,22 +356,42 @@
                 var myChart = new Chart(ctx, {
                     type: 'polarArea',
                     data: {
-                      labels: {{ goals_labels|safe }},
+                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)'],
                       datasets: [{
-                        label: 'Goal Amount',
-                    data: {{ remaining_amounts|safe }},
-                        backgroundColor: [
-                          'rgb(255, 99, 132)',
-                          'rgb(75, 192, 192)',
-                          'rgb(255, 205, 86)',
-                          'rgb(201, 203, 207)',
-                          'rgb(54, 162, 235)'
-                        ]
+                          label: 'Values',
+                          data: [
+                              {{ total_goal_amount }},
+                              {{ salary_fix_total }},
+                              {{ salary_var_total }},
+                              {{ expense_fix_total }},
+                              {{ expense_var_total }}
+                          ],
+                          backgroundColor: [
+                              'rgba(255, 99, 132, 0.5)',
+                              'rgba(54, 162, 235, 0.5)',
+                              'rgba(255, 205, 86, 0.5)',
+                              'rgba(75, 192, 192, 0.5)',
+                              'rgba(153, 102, 255, 0.5)'
+                          ],
+                          borderColor: [
+                              'rgba(255, 99, 132, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(255, 205, 86, 1)',
+                              'rgba(75, 192, 192, 1)',
+                              'rgba(153, 102, 255, 1)'
+                          ],
+                          borderWidth: 1
                       }]
-                    }
-                  });
-
-              </script>
+                  },
+                  options: {
+                      scales: {
+                          y: {
+                              beginAtZero: true
+                          }
+                      }
+                  }
+              });
+          </script>
               <!-- End Polar Area Chart -->
 
             </div>
@@ -292,44 +411,42 @@
                 var myChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                      labels: {{ goals_labels|safe }},
+                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)'],
                       datasets: [{
-                        label: 'Goal Amount',
-                        data: {{ remaining_amounts|safe }},
-                          backgroundColor: 'rgb(255, 99, 132)',
-                        },
-                        {
-                          label: 'kAAm krna h',
-                          data: [-11, -1, 12, 62, 95],
-                          backgroundColor: 'rgb(75, 192, 192)',
-                        },
-                        {
-                          label: 'kaam krna h',
-                          data: [-44, -5, 22, 35, 62],
-                          backgroundColor: 'rgb(255, 205, 86)',
-                        },
-                      ]
-                    },
-                    options: {
-                      plugins: {
-                        title: {
-                          display: true,
-                          text: 'Chart.js Bar Chart - Stacked'
-                        },
-                      },
-                      responsive: true,
+                          label: 'Values',
+                          data: [
+                              {{ total_goal_amount }},
+                              {{ salary_fix_total }},
+                              {{ salary_var_total }},
+                              {{ expense_fix_total }},
+                              {{ expense_var_total }}
+                          ],
+                          backgroundColor: [
+                              'rgba(255, 99, 132, 0.5)',
+                              'rgba(54, 162, 235, 0.5)',
+                              'rgba(255, 205, 86, 0.5)',
+                              'rgba(75, 192, 192, 0.5)',
+                              'rgba(153, 102, 255, 0.5)'
+                          ],
+                          borderColor: [
+                              'rgba(255, 99, 132, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(255, 205, 86, 1)',
+                              'rgba(75, 192, 192, 1)',
+                              'rgba(153, 102, 255, 1)'
+                          ],
+                          borderWidth: 1
+                      }]
+                  },
+                  options: {
                       scales: {
-                        x: {
-                          stacked: true,
-                        },
-                        y: {
-                          stacked: true
-                        }
+                          y: {
+                              beginAtZero: true
+                          }
                       }
-                    }
-                  });
-
-              </script>
+                  }
+              });
+          </script>
               <!-- End Stacked Bar Chart -->
 
             </div>
@@ -349,14 +466,14 @@
                 var myChart = new Chart(ctx, {
                     type: 'bubble',
                     data: {
-                      labels: {{ goals_labels|safe }},
+                      labels: {{ goal_time|safe }},
                       datasets: [{
-                      label: 'salary',
-                      data: {{ remaining_amounts|safe }},
+                        label: 'Goal Amount',
+                        data: {{ goal_amounts|safe }},
                           borderColor: 'rgb(255, 99, 132)',
                           backgroundColor: 'rgba(255, 99, 132, 0.5)'
                         }
-                      ]
+]
                     },
                     options: {
                       responsive: true,
@@ -370,9 +487,8 @@
                         }
                       }
                     }
-                }
-                  );
-
+                  });
+           
               </script>
               <!-- End Bubble Chart -->
 

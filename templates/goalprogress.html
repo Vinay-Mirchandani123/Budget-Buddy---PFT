@@ -1,21 +1,55 @@
 {% extends "base.html" %}
 {% load static %}
+
+
+
 {% block body %}
   <main id="main" class="main">
-{% comment %} 
+
     <div class="pagetitle">
-      <h1>Chart.js</h1>
+      <h1>Goals</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">Charts</li>
-          <li class="breadcrumb-item active">Chart.js</li>
+          <li class="breadcrumb-item"><div>
+            <table class="table">
+              <thead>
+                  <tr>
+                      <th>Goal Name</th>
+                      <th>Amount</th>
+                      <th>Start Time</th>
+                      <th>Goal Deadline</th>
+                      <th>Remaining year</th>
+                      <th>Remaining month</th>
+                      <th>NOTIFICATION</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for goal in goals %}
+                  <tr>
+                    <td>{{ goal.goal_name }}</td>
+                    <td>Rs {{ goal.amount }}</td>
+                    <td>{{ goal.start_time }}</td>
+                    <td>{{ goal.goalDeadline }}</td>
+                    <td>{{goal.remainyear}}year</td>
+                    <td>{{ goal.remainmonth}}month </td>
+                    {% if goal.remainyear == 0 and goal.remainmonth <= 30 %}
+        <td class="alert alert-danger" role="alert">
+                Alert: Goal deadline approaching!
+      
+        </td>
+    {% else %}
+        <td>{{ goal_remaining_time }} GOOD TO GO</td>
+    {% endif %}
+                </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+        </div></li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
-    <p>Chart.JS Examples. You can check the <a href="https://www.chartjs.org/docs/latest/samples/" target="_blank">official website</a> for more examples.</p> {% endcomment %}
-
+    
     <section class="section">
       <div class="row">
 
@@ -34,11 +68,9 @@
                 var myChart = new Chart(ctx, {
                     type: 'line',
                     data: {
-<<<<<<< HEAD
-                      labels: time.map(date => new Date(date).toLocaleDateString()),
-=======
+
                       labels: {{ goal_time|safe }},
->>>>>>> 8036cabd0aead71d6d037c2ba38a0b01c9ebdf0c
+
                 datasets: [{
                     label: 'Goal Amount',
                     data: {{ goal_amounts|safe }},
@@ -51,12 +83,7 @@
                       scales: {
                         y: {
                           beginAtZero: true
-<<<<<<< HEAD
-                        },
-                      
-=======
                         }, 
->>>>>>> 8036cabd0aead71d6d037c2ba38a0b01c9ebdf0c
                       }
                     }
                   });
@@ -77,7 +104,7 @@
               <canvas id="barChart" style="max-height: 400px;"></canvas>
               <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
               <script>
-                var label= {{ goal_labels|safe }}
+                var label= {{ goal_time|safe }}
                 var ctx = document.getElementById('barChart').getContext('2d');
                 var myChart = new Chart(ctx, {
                     type: 'bar',
@@ -140,7 +167,7 @@
                 var myChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
-                      labels: {{ goal_labels|safe }},
+                      labels: {{ goal_time|safe }},
                       datasets: [{
                         label: 'Goal Amount',
                     data: {{ goal_amounts|safe }},
@@ -174,7 +201,7 @@
         var myChart = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                      labels: {{ goal_labels|safe }},
+                      labels: {{ goal_time|safe }},
                       datasets: [{
                         label: 'Goal Amount',
                     data: {{ goal_amounts|safe }},
@@ -208,7 +235,7 @@
                 var myChart = new Chart(ctx, {
                     type: 'radar',
                     data: {
-                      labels: {{ goal_labels|safe }},
+                      labels: {{ goal_time|safe }},
                       datasets: [{
                         label: 'Goal Amount',
                     data: {{ goal_amounts|safe }},
@@ -260,7 +287,7 @@
                 var myChart = new Chart(ctx, {
                     type: 'polarArea',
                     data: {
-                      labels: {{ goal_labels|safe }},
+                      labels: {{ goal_time|safe }},
                       datasets: [{
                         label: 'Goal Amount',
                     data: {{ goal_amounts|safe }},
@@ -295,7 +322,7 @@
                 var myChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                      labels: {{ goal_labels|safe }},
+                      labels: {{ goal_time|safe }},
                       datasets: [{
                         label: 'Goal Amount',
                         data: {{ goal_amounts|safe }},
@@ -352,7 +379,7 @@
                 var myChart = new Chart(ctx, {
                     type: 'bubble',
                     data: {
-                      labels: {{ goal_labels|safe }},
+                      labels: {{ goal_time|safe }},
                       datasets: [{
                         label: 'Goal Amount',
                         data: {{ goal_amounts|safe }},

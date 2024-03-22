@@ -57,11 +57,27 @@ def goalprogress(request):
     goal_labels = [goal.goal_name for goal in goals]
     goal_amounts = [goal.amount for goal in goals]
     goal_time=[goal.time for goal in goals]
-    # Pass data to the template
+    goal_deadlines=[goal.goalDeadline for goal in goals]
+
+    # Calculate remaining time for each goal
+    today = datetime.now().date()
+    for goal in goals:
+        remaining_month = (goal.remainmonth - (today.month - goal.start_time.month))%12
+        # Update the goal_remaining_time field in the model instance
+        goal.remainmonth =remaining_month
+        goal.save()
+    for goal in goals:
+        remaining_year = goal.remainyear - (today.year - goal.start_time.year)
+        goal.remainyear = remaining_year
+        goal.save()
+
     context = {
         'goal_labels': goal_labels,
         'goal_amounts': goal_amounts, 
-        'goal_time': goal_time
+        'goal_time': goal_time,
+        'goal_deadline': goal_deadlines,
+        'goals':goals,
+        # 'goal_remaintime':goal_remaintime,
     }
 
     return render(request, "goalprogress.html",context)
@@ -105,27 +121,57 @@ def incomeprogress(request):
 
 def mainprogress(request):
     # Retrieve data from models
-    goals = Goal.objects.filter(user=request.user)# #
-    ##goals_labels.append(last_updated.strftime('%Y-%m-%d'))
-    # #         remaining_amounts.append(remaining_amount)
+    goals = Goal.objects.filter(user=request.user)
+    salaries = Salary.objects.filter(user=request.user)
+    expenses=Expense.objects.filter(user=request.user)
+    # Prepare data for chart
+    goal_amounts = [goal.amount for goal in goals]
+    total_goal_amount = sum(goal_amounts)
 
-    # #         # Increment date by 15 days
-    # #         last_updated += timedelta(days=15)
-    # context = {
-    #     'goals_labels': goals_labels,
-    #     'remaining_amounts': remaining_amounts,    
-    # }
+    salary_fix_total = sum(s.fix_salary for s in salaries)
+    salary_var_total = sum(s.var_salary for s in salaries)
 
-    # return render(request, "mainprogress.html", context)
+    expense_fix_total = sum(e.fix_expense for e in expenses)
+    expense_var_total = sum(e.var_expense for e in expenses)
+    
+    savings = salary_fix_total - expense_fix_total
+    
     goal_labels = [goal.goal_name for goal in goals]
     goal_amounts = [goal.amount for goal in goals]
+    goal_time=[goal.time for goal in goals]
+    salary_labels = [salary.sal_name for salary in salaries]
+    salary_var = [salary.var_salary for salary in salaries]
+    salary_fix = [salary.fix_salary for salary in salaries]
+    sal_time=[salary.time for salary in salaries]
+    expense_labels = [expense.exp_name for expense in expenses]
+    expense_fix = [expense.fix_expense for expense in expenses]
+    expense_var = [expense.var_expense for expense in expenses]
+    exp_time=[expense.time for expense in expenses]
+    
     # Pass data to the template
     context = {
         'goal_labels': goal_labels,
-        'goal_amounts': goal_amounts,   
+        'goal_amounts': goal_amounts, 
+        'goal_time': goal_time,
+        'expense_labels': expense_labels,
+        'expense_fix': expense_fix,
+        'expense_var': expense_var,
+        'exp_time':exp_time,
+        'salary_labels': salary_labels,
+        'salary_var': salary_var,
+        'salary_fix': salary_fix,
+        'sal_time':sal_time,
+        'total_goal_amount': total_goal_amount,
+        'salary_fix_total': salary_fix_total,
+        'salary_var_total': salary_var_total,
+        'expense_fix_total': expense_fix_total,
+        'expense_var_total': expense_var_total,
+        'savings':savings,
+        'goals':goals,
+        
     }
 
-    return render(request, "goalprogress.html", context)
+    return render(request, "mainprogress.html",context)
 
 # goal/views.py
 
@@ -208,9 +254,20 @@ def goal(request,username):
         goalDeadline = request.POST["goalDeadline"]
         user = username
         start_time=datetime.today()
+        today = datetime.now().date()
+        deadyear= goalDeadline[0:4]
+        deadmonth=goalDeadline[5:7]
+        deadday=goalDeadline[8:]
+        
+        
+        # remaining_time = year*12 + month*30 +day 
+        
+        
         year=start_time.year
         month=start_time.month
         day=start_time.day
+        remaining_month = (int(deadyear) - int(year))*12 + ((int(deadmonth))-int(month))
+        remaining_year =int(deadyear) -  int(year)
         time = year * 100 + month
 
         achieve = Goal(
@@ -219,7 +276,9 @@ def goal(request,username):
             amount=amount,
             goalDeadline=goalDeadline,
             start_time=start_time,
-            time=time
+            time=time,
+            remainmonth=remaining_month,
+            remainyear=remaining_year,
 
         )
         achieve.save()

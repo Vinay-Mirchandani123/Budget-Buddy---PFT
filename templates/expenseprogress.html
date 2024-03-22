@@ -34,13 +34,13 @@
                     data: {
                       labels: {{ exp_time|safe }},
                 datasets: [{
-                    label: 'expense',
+                    label: 'expense fix',
                     data: {{ expense_fix|safe }},
                         fill: false,
                         borderColor: 'rgb(75, 192, 192)',
                         tension: 0.1
                       },{
-                        label: 'var sal',
+                        label: 'var exp',
                         data: {{ expense_var|safe }},
                         fill: false,
                         borderColor: 'rgb(75, 192, 192)',
@@ -77,9 +77,9 @@
                 var myChart = new Chart(ctx, {
                     type: 'bar',
                       data: {
-                        labels: {{ expense_labels|safe }},
+                        labels: {{ exp_time|safe }},
                         datasets: [{
-                            label: 'expense',
+                            label: 'expense fix',
                             data: {{ expense_fix|safe }},
                         backgroundColor: [
                           'rgba(255, 99, 132, 0.2)',
@@ -101,7 +101,7 @@
                         ],
                         borderWidth: 1
                       },{
-                        label: 'var sal',
+                        label: 'var exp',
                         data: {{ expense_var|safe }},
                         backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
@@ -155,9 +155,9 @@
                 var myChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
-                      labels: {{ expense_labels|safe }},
+                      labels: {{ exp_time|safe }},
                 datasets: [{
-                    label: 'expense',
+                    label: 'expense fix',
                     data: {{ expense_fix|safe }},
                         backgroundColor: [
                           'rgb(255, 99, 132)',
@@ -166,7 +166,7 @@
                         ],
                         hoverOffset: 4
                       },{
-                        label: 'var sal',
+                        label: 'var exp',
                         data: {{ expense_var|safe }},
                         backgroundColor: [
                         'rgb(255, 99, 132)',
@@ -199,9 +199,9 @@
         var myChart = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                      labels: {{ expense_labels|safe }},
+                      labels: {{ exp_time|safe }},
                 datasets: [{
-                    label: 'expense',
+                    label: 'expense fix',
                     data: {{ expense_fix|safe }},
                         backgroundColor: [
                           'rgb(255, 99, 132)',
@@ -210,7 +210,7 @@
                         ],
                         hoverOffset: 4
                       },{
-                        label: 'var sal',
+                        label: 'var exp',
                         data: {{ expense_var|safe }},
                         backgroundColor: [
                         'rgb(255, 99, 132)',
@@ -243,9 +243,9 @@
                 var myChart = new Chart(ctx, {
                     type: 'radar',
                     data: {
-                      labels: {{ expense_labels|safe }},
+                      labels: {{ exp_time|safe }},
                 datasets: [{
-                    label: 'expense',
+                    label: 'expense fix',
                     data: {{ expense_fix|safe }},
                         fill: true,
                         backgroundColor: 'rgba(255, 99, 132, 0.2)',
@@ -255,7 +255,7 @@
                         pointHoverBackgroundColor: '#fff',
                         pointHoverBorderColor: 'rgb(255, 99, 132)'
                       }, {
-                        label: 'var sal',
+                        label: 'var exp',
                         data: {{ expense_var|safe }},
                         fill: true,
                         backgroundColor: 'rgba(54, 162, 235, 0.2)',
@@ -295,9 +295,9 @@
                 var myChart = new Chart(ctx, {
                     type: 'polarArea',
                     data: {
-                      labels: {{ expense_labels|safe }},
+                      labels: {{ exp_time|safe }},
                       datasets: [{
-                          label: 'expense',
+                          label: 'expense fix',
                           data: {{ expense_fix|safe }},
                         backgroundColor: [
                           'rgb(255, 99, 132)',
@@ -308,7 +308,7 @@
                         ]
                       },
                       {
-                        label: 'var sal',
+                        label: 'var exp',
                         data: {{ expense_var|safe }},
                         backgroundColor: [
                         'rgb(255, 99, 132)',
@@ -342,14 +342,14 @@
                 var myChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                      labels: {{ expense_labels|safe }},
+                      labels: {{ exp_time|safe }},
                       datasets: [{
-                          label: 'expense',
+                          label: 'expense fix',
                           data: {{ expense_fix|safe }},
                           backgroundColor: 'rgb(255, 99, 132)',
                         },
                         {
-                          label: 'var sal',
+                          label: 'var exp',
                         data: {{ expense_var|safe }},
                           backgroundColor: 'rgb(75, 192, 192)',
                         }
@@ -394,15 +394,15 @@
                 var myChart = new Chart(ctx, {
                     type: 'bubble',
                     data: {
-                      labels: {{ expense_labels|safe }},
+                      labels: {{ exp_time|safe }},
                 datasets: [{
-                    label: 'expense',
+                    label: 'expense fix',
                     data: {{ expense_fix|safe }},
                           borderColor: 'rgb(255, 99, 132)',
                           backgroundColor: 'rgba(255, 99, 132, 0.5)'
                         },
                         {
-                          label: 'var sal',
+                          label: 'var exp',
                         data: {{ expense_var|safe }},
                           borderColor: 'rgb(75, 192, 192)',
                           backgroundColor: 'rgba(75, 192, 192, 0.5)'

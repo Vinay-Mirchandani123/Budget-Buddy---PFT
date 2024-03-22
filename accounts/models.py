@@ -26,3 +26,19 @@ def send_email_token(sender, instance, created, **kwargs):
             account_activation_email(email, email_token)
     except Exception as e:
         print(e)
+
+class Editprofile(models.Model):
+    profileimage= models.ImageField(upload_to='static/img/userimage/ ',default= 'static/img/profile3.jpeg')
+    namefirst= models.CharField(max_length=100, blank=False, null=False)
+    lastname= models.CharField(max_length=100, blank=False, null=False)
+    about= models.TextField(blank=False, null=False)
+    job= models.CharField(max_length=100,blank=False, null=False)
+    country= models.CharField(max_length=100, blank=False, null=False)
+    address= models.TextField(blank=False, null=False)
+    phone= models.CharField(max_length=12, blank=False, null=False)
+    email= models.EmailField(blank=False, null=False)
+    twitter= models.URLField(max_length=200, blank=True, null=True)
+    facebook= models.URLField(max_length=200, blank=True, null=True)
+    instagram= models.URLField(max_length=200, blank=True, null=True)
+    linkedin= models.URLField(max_length=200, blank=True, null=True)
+    
