@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from django.views import View
 from .models import *
 from .serializers import *
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # from .models import Profile
 
@@ -56,7 +56,7 @@ def goalprogress(request):
     
     goal_labels = [goal.goal_name for goal in goals]
     goal_amounts = [goal.amount for goal in goals]
-    goal_time=[goal.time for goal in goals]
+    goal_time=[goal.start_time for goal in goals]
     # Pass data to the template
     context = {
         'goal_labels': goal_labels,
@@ -73,7 +73,7 @@ def expenseprogress(request):
     expense_labels = [expense.exp_name for expense in expenses]
     expense_fix = [expense.fix_expense for expense in expenses]
     expense_var = [expense.var_expense for expense in expenses]
-    exp_time=[expense.time for expense in expenses]
+    exp_time=[expense.start_time for expense in expenses]
     # Pass data to the template
     context = {
         'expense_labels': expense_labels,
@@ -91,7 +91,7 @@ def incomeprogress(request):
     salary_labels = [salary.sal_name for salary in salaries]
     salary_var = [salary.var_salary for salary in salaries]
     salary_fix = [salary.fix_salary for salary in salaries]
-    sal_time=[salary.time for salary in salaries]
+    sal_time=[salary.start_time for salary in salaries]
     # Pass data to the template
     context = {
         
@@ -170,12 +170,7 @@ def salary(request, username):
         fix_salary = request.POST["fix_salary"]
         var_salary = request.POST["var_salary"]
         user = username
-        start_time=datetime.today()
-        year=start_time.year
-        month=start_time.month
-        day=start_time.day
-        time = year * 100 + month
-        income = Salary(sal_name=sal_name,user=user,fix_salary=fix_salary, var_salary=var_salary,start_time=start_time, time=time)
+        income = Salary(sal_name=sal_name,user=user,fix_salary=fix_salary, var_salary=var_salary,start_time=datetime.today())
         income.save()
         messages.success(request, "salary entered successfully")
 
@@ -188,13 +183,8 @@ def expense(request,username):
         fix_expense = request.POST["fix_expense"]
         var_expense = request.POST["var_expense"]
         user = username
-        start_time=datetime.today()
-        year=start_time.year
-        month=start_time.month
-        day=start_time.day
-        time = year * 100 + month
         kharcha = Expense(
-           user=user, exp_name=exp_name, fix_expense=fix_expense, var_expense=var_expense,start_time=start_time, time=time
+           user=user, exp_name=exp_name, fix_expense=fix_expense, var_expense=var_expense,start_time=datetime.today()
         )
         kharcha.save()
         messages.success(request, "expense entered successfully")
@@ -208,24 +198,13 @@ def goal(request,username):
         goalDeadline = request.POST["goalDeadline"]
         user = username
         start_time=datetime.today()
-<<<<<<< HEAD
         
-=======
-        year=start_time.year
-        month=start_time.month
-        day=start_time.day
-        time = year * 100 + month
->>>>>>> 8036cabd0aead71d6d037c2ba38a0b01c9ebdf0c
         achieve = Goal(
             user=user,
             goal_name=goal_name,
             amount=amount,
             goalDeadline=goalDeadline,
             start_time=start_time,
-<<<<<<< HEAD
-=======
-            time=time
->>>>>>> 8036cabd0aead71d6d037c2ba38a0b01c9ebdf0c
         )
         achieve.save()
         messages.success(request, "goal entered successfully")

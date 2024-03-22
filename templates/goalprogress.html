@@ -31,14 +31,10 @@
                 
                 var label={{goal_time|safe}}
                 var ctx = document.getElementById('lineChart').getContext('2d');
-                var myChart = new Chart(ctx, {
+        var myChart = new Chart(ctx, {
                     type: 'line',
                     data: {
-<<<<<<< HEAD
                       labels: time.map(date => new Date(date).toLocaleDateString()),
-=======
-                      labels: {{ goal_time|safe }},
->>>>>>> 8036cabd0aead71d6d037c2ba38a0b01c9ebdf0c
                 datasets: [{
                     label: 'Goal Amount',
                     data: {{ goal_amounts|safe }},
@@ -51,12 +47,8 @@
                       scales: {
                         y: {
                           beginAtZero: true
-<<<<<<< HEAD
                         },
                       
-=======
-                        }, 
->>>>>>> 8036cabd0aead71d6d037c2ba38a0b01c9ebdf0c
                       }
                     }
                   });
