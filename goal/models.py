@@ -27,7 +27,8 @@ class Goal(models.Model):
     goal_name=models.CharField(max_length=100,null=False, blank=False)
     amount=models.IntegerField(null=False, blank=False)
     goalDeadline=models.DateField(null=False, blank=False)
-    time=models.IntegerField(null=True, blank=True)
+    remainmonth=models.IntegerField(null=False, blank=False)
+    remainyear=models.IntegerField(null=False, blank=False)
     start_time=models.DateField(null=True, blank=True)
 
     # def __str__(self):

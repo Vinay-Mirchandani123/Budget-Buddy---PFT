@@ -12,5 +12,6 @@ urlpatterns = [
     path("expense/<str:username>/", views.expense, name='expense'),
     path("goal/<str:username>/", views.goal, name='goal'),
     path("dashboard", views.dashboard, name='dashboard'),
+    
 
 ]
