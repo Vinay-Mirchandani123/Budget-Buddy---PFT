@@ -3,10 +3,12 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout,get_user
 from django.contrib import messages
-from .models import Profile
+from .models import Editprofile
 from base.emails import account_activation_email
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+
 def index(request):
     if request.user.is_authenticated:
        return render(request, 'index.html')
@@ -91,3 +93,36 @@ def activate_email(request , email_token):
         return redirect('/accounts/login')
     except Exception as e:
         return HttpResponse('Invalid Email token')
+
+@login_required
+def editprofile(request):
+    if request.method == "POST":
+        # Get the current user
+        user = request.user
+        # Get the user's profile or create a new one if it doesn't exist
+        profile, created = Editprofile.objects.get_or_create(user=user)
+        
+        # Update the profile fields
+        if 'profileimage' in request.FILES:
+            profile.profileimage = request.FILES['profileimage']
+        # profile.profileimage = request.POST['profileimage']
+        profile.namefirst = request.POST['namefirst']
+        profile.lastname = request.POST['lastname']
+        profile.about = request.POST['about']
+        profile.job = request.POST['job']
+        profile.country = request.POST['country']
+        profile.address = request.POST['address']
+        profile.phone = request.POST['phone']
+        profile.email = request.POST['email']
+        profile.twitter = request.POST['twitter']
+        profile.facebook = request.POST['facebook']
+        profile.instagram = request.POST['instagram']
+        profile.linkedin = request.POST['linkedin']
+        
+        # Save the profile
+        profile.save()
+        
+        messages.success(request, "Saved Changes Successfully")
+        return HttpResponseRedirect(request.path_info)
+    
+    return render(request, "userprofile.html")
