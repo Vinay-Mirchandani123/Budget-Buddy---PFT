@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from base.emails import account_activation_email
 import uuid
-from django.contrib.auth.models import User
+
 
 # Create your models here.
 

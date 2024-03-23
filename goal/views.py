@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from django.views import View
 from .models import *
 from .serializers import *
-from datetime import datetime, timedelta
+from datetime import datetime
 
 # from .models import Profile
 
@@ -46,7 +46,62 @@ from datetime import datetime, timedelta
 
 
 def dashboard(request):
-    return render(request, "dashboard.html")
+    goals = Goal.objects.filter(user=request.user)
+    salaries = Salary.objects.filter(user=request.user)
+    expenses=Expense.objects.filter(user=request.user)
+    # Prepare data for chart
+    goal_amounts = [goal.amount for goal in goals]
+    total_goal_amount = sum(goal_amounts)
+
+    salary_fix_total = sum(s.fix_salary for s in salaries)
+    salary_var_total = sum(s.var_salary for s in salaries)
+
+    expense_fix_total = sum(e.fix_expense for e in expenses)
+    expense_var_total = sum(e.var_expense for e in expenses)
+    
+    savings = salary_fix_total - expense_fix_total
+    
+    # for s in salaries:
+    #     salary1 = salary_var + salary_fix
+    #     s.totalsalary = salary1
+    #     s.save()
+        
+    goal_labels = [goal.goal_name for goal in goals]
+    goal_amounts = [goal.amount for goal in goals]
+    goal_time=[goal.time for goal in goals]
+    salary_labels = [salary.sal_name for salary in salaries]
+    salary_var = [salary.var_salary for salary in salaries]
+    salary_fix = [salary.fix_salary for salary in salaries]
+    sal_time=[salary.time for salary in salaries]
+    expense_labels = [expense.exp_name for expense in expenses]
+    expense_fix = [expense.fix_expense for expense in expenses]
+    expense_var = [expense.var_expense for expense in expenses]
+    exp_time=[expense.time for expense in expenses]
+    # Pass data to the template
+    context = {
+        'goal_labels': goal_labels,
+        'goal_amounts': goal_amounts, 
+        'goal_time': goal_time,
+        'expense_labels': expense_labels,
+        'expense_fix': expense_fix,
+        'expense_var': expense_var,
+        'exp_time':exp_time,
+        'salary_labels': salary_labels,
+        'salary_var': salary_var,
+        'salary_fix': salary_fix,
+        'sal_time':sal_time,
+        'total_goal_amount': total_goal_amount,
+        'salary_fix_total': salary_fix_total,
+        'salary_var_total': salary_var_total,
+        'expense_fix_total': expense_fix_total,
+        'expense_var_total': expense_var_total,
+        'savings':savings,
+        'goals':goals,
+        'salaries':salaries,
+        'expenses':expenses,
+        
+    }
+    return render(request, "dashboard.html",context)
 
 def goalprogress(request):
     # Retrieve data from models
@@ -89,7 +144,7 @@ def expenseprogress(request):
     expense_labels = [expense.exp_name for expense in expenses]
     expense_fix = [expense.fix_expense for expense in expenses]
     expense_var = [expense.var_expense for expense in expenses]
-    exp_time=[expense.start_time for expense in expenses]
+    exp_time=[expense.time for expense in expenses]
     # Pass data to the template
     context = {
         'expense_labels': expense_labels,
@@ -107,7 +162,7 @@ def incomeprogress(request):
     salary_labels = [salary.sal_name for salary in salaries]
     salary_var = [salary.var_salary for salary in salaries]
     salary_fix = [salary.fix_salary for salary in salaries]
-    sal_time=[salary.start_time for salary in salaries]
+    sal_time=[salary.time for salary in salaries]
     # Pass data to the template
     context = {
         
@@ -118,6 +173,16 @@ def incomeprogress(request):
     }
 
     return render(request, "incomeprogress.html", context)
+
+def user_count(request):
+    # Count the number of users
+    user_count = User.objects.count()
+    
+    # Pass the user count to the template
+    context = {
+        'user_count': user_count
+    }
+    return render(request, "dashboard.html", context)
 
 def mainprogress(request):
     # Retrieve data from models
@@ -147,7 +212,6 @@ def mainprogress(request):
     expense_fix = [expense.fix_expense for expense in expenses]
     expense_var = [expense.var_expense for expense in expenses]
     exp_time=[expense.time for expense in expenses]
-    
     # Pass data to the template
     context = {
         'goal_labels': goal_labels,
@@ -216,7 +280,13 @@ def salary(request, username):
         fix_salary = request.POST["fix_salary"]
         var_salary = request.POST["var_salary"]
         user = username
-        income = Salary(sal_name=sal_name,user=user,fix_salary=fix_salary, var_salary=var_salary,start_time=datetime.today())
+        start_time=datetime.today()
+        totalsalary=int(int(fix_salary)+int(var_salary))
+        year=start_time.year
+        month=start_time.month
+        day=start_time.day
+        time = year * 100 + month
+        income = Salary(totalsalary=totalsalary,sal_name=sal_name,user=user,fix_salary=fix_salary, var_salary=var_salary,start_time=start_time, time=time)
         income.save()
         messages.success(request, "salary entered successfully")
 
@@ -229,8 +299,14 @@ def expense(request,username):
         fix_expense = request.POST["fix_expense"]
         var_expense = request.POST["var_expense"]
         user = username
+        start_time=datetime.today()
+        totalexpense=int(int(var_expense)+int(fix_expense))
+        year=start_time.year
+        month=start_time.month
+        day=start_time.day
+        time = year * 100 + month
         kharcha = Expense(
-           user=user, exp_name=exp_name, fix_expense=fix_expense, var_expense=var_expense,start_time=datetime.today()
+          totalexpense=totalexpense, user=user, exp_name=exp_name, fix_expense=fix_expense, var_expense=var_expense,start_time=start_time, time=time
         )
         kharcha.save()
         messages.success(request, "expense entered successfully")
