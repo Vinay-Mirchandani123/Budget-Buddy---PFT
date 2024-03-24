@@ -1,8 +1,31 @@
 {% extends "base.html" %}
 {% load static %}
 {% block body %}
-<main id="main" class="main">
 
+<main id="main" class="main">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    // JavaScript function to show pop-up notification
+    function showNotification(message) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Notification',
+            text: message,
+            confirmButtonText: 'OK'
+        });
+    }
+
+    // Check conditions and show notifications
+    {% if message1 %}
+        showNotification("{{ message1 }}");
+    {% endif %}
+    {% if message2 %}
+        showNotification("{{ message2 }}");
+    {% endif %}
+    {% if message3 %}
+        showNotification("{{ message3 }}");
+    {% endif %}
+</script>
     {% comment %} <div class="pagetitle">
       <h1>Chart.js</h1>
       <nav>

@@ -10,6 +10,7 @@ class Salary(models.Model):
     start_time=models.DateField(null=True, blank=True)
     time=models.IntegerField(null=False, blank=False)
     totalsalary=models.IntegerField(null=False, blank=False)
+    last_salary_date=models.DateField(null=True, blank=True)
     # def __str__(self):
     #     return self.name
     
@@ -22,6 +23,9 @@ class Expense(models.Model):
     start_time=models.DateField(null=True, blank=True)
     time=models.IntegerField(null=False, blank=False)
     totalexpense=models.IntegerField(null=False, blank=False)
+    last_expense_date=models.DateField(null=True, blank=True)
+    
+    
     # def __str__(self):
     #     return self.name
 
@@ -32,8 +36,11 @@ class Goal(models.Model):
     goalDeadline=models.DateField(null=False, blank=False)
     remainmonth=models.IntegerField(null=False, blank=False)
     remainyear=models.IntegerField(null=False, blank=False)
+    remaindays=models.IntegerField(null=False, blank=False)
     start_time=models.DateField(null=True, blank=True)
     time=models.IntegerField(null=False, blank=False)
+    remainingamount=models.IntegerField(null=False, blank=False)
+    days_in_month=models.IntegerField(null=False, blank=False)
 
     # def __str__(self):
     #     return self.name

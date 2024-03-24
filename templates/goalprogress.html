@@ -20,6 +20,8 @@
                       <th>Goal Deadline</th>
                       <th>Remaining year</th>
                       <th>Remaining month</th>
+                      <th>Remaining days</th>
+                      <th>Remaining amount</th>
                       <th>NOTIFICATION</th>
                   </tr>
               </thead>
@@ -32,14 +34,46 @@
                     <td>{{ goal.goalDeadline }}</td>
                     <td>{{goal.remainyear}}year</td>
                     <td>{{ goal.remainmonth}}month </td>
-                    {% if goal.remainyear == 0 and goal.remainmonth <= 30 %}
-        <td class="alert alert-danger" role="alert">
-                Alert: Goal deadline approaching!
-      
-        </td>
-    {% else %}
-        <td>{{ goal_remaining_time }} GOOD TO GO</td>
+                    <td>{{ goal.remaindays}}days </td>
+                    <td>Rs {{ goal.remainingamount}} </td>
+                    {% if goal.remainingamount != 0 and goal.remainmonth >= 0 %}
+                      {% if goal.remaindays <= 0 %}
+                      <td >
+                          <p style="color: red;">You didn't complete this goal under your deadline.</p>
+                        </td>
+                      {% elif goal.remaindays <= 15 %}
+                      <td >
+                        <p style="color: orange;">Goal deadline approaching!</p>
+                      </td>
+                          
+                      {% else %}
+                      <td>
+                          <p style="color: green;">Good to go!</p>
+                      </td>
+                      {% endif %}
+                  {% else %}
+                      {% if goal.remaindays >= 0 and goal.remainingamount == 0 %}
+                      <td>
+                          <p style="color: blue;">Congratulations, you did it!</p>
+                      </td>
+                      {% endif %}
     {% endif %}
+                    {% comment %} {% if goal.remainday <= 0 and goal.remainingamount != 0 %}
+                      <td class="alert alert-danger" role="alert">
+                        Alert:your deadline has expired but you have not acheived
+            
+                      </td>
+                    {% endif %}
+                    {% if goal.remainday > 0 and goal.remainingamount != 0 %}
+                      {% if goal.remainmonth <= 0 and goal.remaindays <= 15 %}
+                        <td class="alert alert-danger" role="alert">
+                          Alert: Goal deadline approaching!
+      
+                        </td>
+                      {% endif %}
+                      {% else %}
+                        <td> GOOD TO GO</td>
+                    {% endif %} {% endcomment %}
                 </tr>
                   {% endfor %}
               </tbody>

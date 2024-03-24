@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deadline Date Selector</title>
+  <!-- Include jQuery and jQuery UI -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+</head>
+<body>
+  <form action="your_action_url" method="POST">
+    <label for="deadlineDate">Deadline Date:</label>
+    <input type="text" id="deadlineDate" name="deadlineDate" placeholder="Select Deadline Date" required>
+    <button type="submit">Submit</button>
+  </form>
+
+  <!-- Script to initialize the date picker and set minimum date -->
+  <script>
+    $(function() {
+      // Initialize the date picker
+      $("#deadlineDate").datepicker({
+        dateFormat: 'yy-mm-dd', // Set the date format as YYYY-MM-DD
+        minDate: new Date() // Set the minimum date to today's date
+      });
+    });
+  </script>
+</body>
+</html>

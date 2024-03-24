@@ -1,5 +1,29 @@
 {% extends "base.html" %}
 {% load static %}
+<style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        a {
+            text-decoration: none;
+            color: blue;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
   {% block body %}
   <main id="main" class="main">
 
@@ -94,7 +118,7 @@
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Revenue <span>| This Month</span></h5>
+                  <h5 class="card-title">EXPENSE <span></span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -372,56 +396,83 @@
                 </div>
 
                 <div class="card-body pb-0">
-                  <h5 class="card-title">Top Selling <span>| Today</span></h5>
+                  <h5 class="card-title">INVESTMENT AREAS <span></span></h5>
 
                   <table class="table table-borderless">
-                    <thead>
-                      <tr>
-                        <th scope="col">Preview</th>
-                        <th scope="col">Product</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Sold</th>
-                        <th scope="col">Revenue</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="{% static "img/product-1.jpg" %}" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">Ut inventore ipsa voluptas nulla</a></td>
-                        <td>$64</td>
-                        <td class="fw-bold">124</td>
-                        <td>$5,828</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="{% static "img/product-2.jpg" %}" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">Exercitationem similique doloremque</a></td>
-                        <td>$46</td>
-                        <td class="fw-bold">98</td>
-                        <td>$4,508</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="{% static "img/product-3.jpg" %}" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">Doloribus nisi exercitationem</a></td>
-                        <td>$59</td>
-                        <td class="fw-bold">74</td>
-                        <td>$4,366</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="{% static "img/product-4.jpg" %}" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">Officiis quaerat sint rerum error</a></td>
-                        <td>$32</td>
-                        <td class="fw-bold">63</td>
-                        <td>$2,016</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="{% static "img/product-5.jpg" %}" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">Sit unde debitis delectus repellendus</a></td>
-                        <td>$79</td>
-                        <td class="fw-bold">41</td>
-                        <td>$3,239</td>
-                      </tr>
-                    </tbody>
+                    <tr>
+                      <th>Investment Option</th>
+                      <th>Advantages</th>
+                      <th>Disadvantages</th>
+                      <th>Profit Rate</th>
+                      <th>More Information</th>
+                  </tr>
+                  <tr>
+                      <td>Public Provident Fund (PPF)</td>
+                      <td>
+                          - Tax benefits: PPF offers tax-saving benefits under Section 80C of the Income Tax Act.<br>
+                          - Long-term savings: Ideal for long-term financial goals due to compounding benefits.
+                      </td>
+                      <td>
+                          - Lock-in period: PPF has a lock-in period of 15 years, restricting early withdrawals.<br>
+                          - Limited annual contributions: Annual contribution limit of ₹1.5 lakh per financial year.
+                      </td>
+                      <td id="ppfRate">Loading...</td>
+                      <td><a href="https://www.indiapost.gov.in/ppf_scheme.aspx">Learn More</a></td>
+                  </tr>
+                  <tr>
+                      <td>Equity Mutual Funds</td>
+                      <td>
+                          - Potential for high returns: Invests in a diversified portfolio of stocks for growth.<br>
+                          - Professional management: Managed by experienced fund managers.
+                      </td>
+                      <td>
+                          - Market risk: Subject to market fluctuations and volatility.<br>
+                          - No guaranteed returns: Returns are not fixed and depend on market performance.
+                      </td>
+                      <td id="equityRate">Loading...</td>
+                      <td><a href="https://www.amfiindia.com/investor-corner/how-to-invest">Learn More</a></td>
+                  </tr>
+                  <tr>
+                      <td>Fixed Deposits (FDs)</td>
+                      <td>
+                          - Guaranteed returns: FDs offer assured returns on investment.<br>
+                          - Low risk: Relatively low risk compared to other investment avenues.
+                      </td>
+                      <td>
+                          - Lower returns compared to other investments: Typically offers fixed interest rates.<br>
+                          - Lock-in period: FDs have a fixed tenure with penalties for premature withdrawals.
+                      </td>
+                      <td id="fdRate">Loading...</td>
+                      <td><a href="https://www.bankbazaar.com/fixed-deposit.html">Learn More</a></td>
+                  </tr>
+                  <tr>
+                      <td>Stock Market</td>
+                      <td>
+                          - Potential for high returns: Offers the opportunity to earn high returns over time.<br>
+                          - Diversification: Invest in various sectors for portfolio diversification.
+                      </td>
+                      <td>
+                          - High risk: Subject to market volatility and unpredictable price movements.<br>
+                          - Market knowledge required: Requires understanding of stock market trends.
+                      </td>
+                      <td id="stockRate">Loading...</td>
+                      <td><a href="https://www.nseindia.com/">Learn More</a></td>
+                  </tr>
                   </table>
+                  <script>
+                    // Simulated real-time updates (replace with actual script)
+                    setInterval(() => {
+                        document.getElementById('ppfRate').textContent = getRandomRate(6, 8) + '%'; // Random rate between 6% to 8%
+                        document.getElementById('equityRate').textContent = getRandomRate(10, 15) + '%'; // Random rate between 10% to 15%
+                        document.getElementById('fdRate').textContent = getRandomRate(4, 6) + '%'; // Random rate between 4% to 6%
+                        document.getElementById('stockRate').textContent = getRandomRate(12, 18) + '%'; // Random rate between 12% to 18%
+                    }, 5000); // Update rates every 5 seconds
+            
+                    // Function to get a random rate within a range
+                    function getRandomRate(min, max) {
+                        return (Math.random() * (max - min) + min).toFixed(2);
+                    }
+                </script>
 
                 </div>
 
@@ -592,7 +643,7 @@
         var myChart = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                      labels: {{ goal_time|safe }},
+                      labels: {{ goal_labels|safe }},
                       datasets: [{
                         label: 'Goal Amount',
                     data: {{ goal_amounts|safe }},
@@ -611,6 +662,7 @@
             </div>
           </div><!-- End Website Traffic -->
 
+          
           <!-- News & Updates Traffic -->
           <div class="card">
             <div class="filter">
@@ -630,7 +682,7 @@
               <h5 class="card-title">News &amp; Updates <span>| Today</span></h5>
 
               <div class="news">
-                <div class="post-item clearfix">
+                {% comment %} <div class="post-item clearfix">
                   <img src="{% static "img/news-1.jpg" %}" alt="">
                   <h4><a href="#">Nihil blanditiis at in nihil autem</a></h4>
                   <p>Sit recusandae non aspernatur laboriosam. Quia enim eligendi sed ut harum...</p>
@@ -658,7 +710,10 @@
                   <img src="{% static "img/news-5.jpg" %}" alt="">
                   <h4><a href="#">Et dolores corrupti quae illo quod dolor</a></h4>
                   <p>Odit ut eveniet modi reiciendis. Atque cupiditate libero beatae dignissimos eius...</p>
-                </div>
+                </div> {% endcomment %}
+                
+    
+
 
               </div><!-- End sidebar recent posts-->
 
@@ -666,7 +721,7 @@
           </div><!-- End News & Updates -->
 
         </div><!-- End Right side columns -->
-
+              
       </div>
     </section>
 

@@ -43,4 +43,14 @@
     </div><!-- End Container -->
 
 </main>
+<script>
+    window.onload = function() {
+        var formEnabled = {{ form_enabled|yesno:"true,false" }};
+        if (!formEnabled) {
+            document.getElementById('salaryForm').querySelectorAll('input, button').forEach(function(element) {
+                element.disabled = true;
+            });
+        }
+    };
+</script>
 {% endblock body %}
