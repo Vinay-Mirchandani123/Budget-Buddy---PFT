@@ -14,7 +14,8 @@ from .models import *
 from .serializers import *
 from datetime import datetime,timedelta
 import calendar
-
+from django.db.models import Sum
+count=1
 # from .models import Profile
 
 # # Create your views here.
@@ -61,7 +62,7 @@ def dashboard(request):
     expense_var_total = sum(e.var_expense for e in expenses)
     
     savings = salary_fix_total+salary_var_total - expense_fix_total-expense_var_total
-    
+    remainingsaving=savings
     # for s in salaries:
     #     salary1 = salary_var + salary_fix
     #     s.totalsalary = salary1
@@ -79,13 +80,13 @@ def dashboard(request):
     expense_var = [expense.var_expense for expense in expenses]
     exp_time=[expense.time for expense in expenses]
     for goal in goals:
-        if savings > 0:
-            if goal.amount >= savings:
-                goal.amount -= savings
-                savings = 0
+        if remainingsaving > 0:
+            if goal.remainingamount >= remainingsaving:
+                goal.remainingamount -= remainingsaving
+                remainingsaving = 0
             else:
-                savings -= goal.amount
-                goal.amount = 0
+                remainingsaving -= goal.remainingamount
+                goal.remainingamount = 0
             goal.save()
     # Pass data to the template
     context = {
@@ -109,6 +110,7 @@ def dashboard(request):
         'goals':goals,
         'salaries':salaries,
         'expenses':expenses,
+        'remainingsaving':remainingsaving
     }
     return render(request, "dashboard.html",context)
 
@@ -328,6 +330,7 @@ def mainprogress(request):
 #     return render(request, 'goal_chart.html', context)
 
 def salary(request, username):
+    global count
     if request.method == "POST":
         sal_name=request.POST['sal_name']
         fix_salary = request.POST["fix_salary"]
@@ -339,13 +342,18 @@ def salary(request, username):
         month=start_time.month
         day=start_time.day
         time = year * 100 + month
+        start_date = Salary.objects.filter(user=username).order_by('-start_time').first()
+        if start_date is not None and start_date.start_time is not None and (datetime.now().date() > start_date.start_time + timedelta(days=30*count) and datetime.now().date() < start_date.start_time + timedelta(days=30*(count+1))):
+            totalsalary=int(int(fix_salary)+int(var_salary))
+            count+=1
         income = Salary(totalsalary=totalsalary,sal_name=sal_name,user=user,fix_salary=fix_salary, var_salary=var_salary,start_time=start_time, time=time,last_salary_date=datetime.now())
         income.save()
-        messages.success(request, "salary entered successfully")
+        messages.success(request, "Income entered successfully")
         # Check if a month has passed since the last salary entry
     last_salary = Salary.objects.filter(user=username).order_by('-last_salary_date').first()
-    if last_salary is not None and last_salary.last_salary_date is not None and datetime.now().date() < last_salary.last_salary_date + timedelta(days=1):
+    if last_salary is not None and last_salary.last_salary_date is not None and datetime.now().date() < last_salary.last_salary_date + timedelta(days=30):
         form_enabled = False
+        messages.success(request, "You have entered your Income, Now you can enter it after 30days")
     else:
         form_enabled = True
 
@@ -373,12 +381,19 @@ def expense(request,username):
     last_expense = Expense.objects.filter(user=username).order_by('-last_expense_date').first()
     if last_expense is not None and last_expense.last_expense_date is not None and datetime.now().date() < last_expense.last_expense_date + timedelta(days=1):
         form_enabled = False
+        messages.success(request, "You have entered your Expense, Now you can enter it after 30 days")
     else:
         form_enabled = True
     return render(request, "expense.html",{"form_enabled": form_enabled})
 
 
 def goal(request,username):
+    income_exists = Salary.objects.filter(user=username).exists()
+    expense_exists = Expense.objects.filter(user=username).exists()
+
+    if not income_exists or not expense_exists:
+        messages.error(request, "Please enter your income and expense first.")
+        return redirect("/goal/salary/user.username")
     if request.method == "POST":
         goalDeadline = request.POST["goalDeadline"]
         
@@ -411,7 +426,28 @@ def goal(request,username):
                 
                 remaining_days = datetime.strptime(goalDeadline, '%Y-%m-%d').date().day - datetime.now().date().day
             time = start_time.year * 100 + start_time.month
+            
+            # Calculate the total income and expense of the user
+            total_income = Salary.objects.filter(user=username).aggregate(Sum('totalsalary'))['totalsalary__sum']
+            total_expense = Expense.objects.filter(user=username).aggregate(Sum('totalexpense'))['totalexpense__sum']
+            savings_rate = total_income - total_expense
+
+            # Check if the user's salary and expense are enough to meet the goal amount
+            if savings_rate < int(amount):
+                if remaining_month > 0:
+                    required_expense_reduction = int((int(amount) - (savings_rate*remaining_month))/remaining_month)
+                else :
+                    required_expense_reduction = int(int(amount) - (savings_rate*remaining_month))
+                if savings_rate > 0:
+                    required_months = int(amount) / savings_rate
+                    new_deadline = datetime.now() + timedelta(days=required_months*30)
+                    messages.warning(request, f"Your current income and expense are not enough to meet the goal amount. You need to reduce your expense by at least Rs. {required_expense_reduction} or If you donot want to decrease your expense, you should increase your goal deadline to {new_deadline.strftime('%Y-%m-%d')}. You can also consider opting for an investment method to increase your variable salary.")
+                    return render(request, "goal.html")
+                else:
+                    messages.warning(request, "You are not currently saving any money. Please consider increasing your income or decreasing your expenses.")
+                    return render(request, "goal.html")
             # Create the goal instance only if the deadline is valid
+            
             achieve = Goal(
                 user=user,
                 goal_name=goal_name,
@@ -428,7 +464,7 @@ def goal(request,username):
             achieve.save()
             messages.success(request, "Goal entered successfully")
         else:
-            messages.error(request, "Invalid deadline. Deadline should be greater than today's date.")
+            messages.warning(request, "Invalid deadline. Deadline should be greater than today's date.")
     # if request.method == "POST":
     #     goalDeadline = request.POST["goalDeadline"]
         

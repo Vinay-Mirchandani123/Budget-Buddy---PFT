@@ -66,4 +66,13 @@
     </div><!-- End Container -->
 
 </main>
+<script>
+    window.onload = function() {
+        {% if messages %}
+            {% for message in messages %}
+                showNotification("{{ message }}");
+            {% endfor %}
+        {% endif %}
+    };
+</script>
 {% endblock body %}
