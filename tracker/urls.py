@@ -19,6 +19,7 @@ from django.urls import path,include
 from goal.views import *
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns # new
 
 admin.site.site_header = "Tracker"
 admin.site.site_title = "Tracker Admin Portal"
@@ -33,3 +34,5 @@ urlpatterns = [
     path('api/expData/', expDataView.as_view()),
     path('api/goalData/', goalDataView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += staticfiles_urlpatterns() # new
