@@ -438,12 +438,12 @@ def goal(request,username):
                     required_expense_reduction = int((int(amount) - (savings_rate*remaining_month))/remaining_month)
                 else :
                     required_expense_reduction = int(int(amount) - (savings_rate*remaining_month))
-                if savings_rate > 0:
+                if savings_rate > 0 and required_expense_reduction > 0:
                     required_months = int(amount) / savings_rate
                     new_deadline = datetime.now() + timedelta(days=required_months*30)
                     messages.warning(request, f"Your current income and expense are not enough to meet the goal amount. You need to reduce your expense by at least Rs. {required_expense_reduction} or If you donot want to decrease your expense, you should increase your goal deadline to {new_deadline.strftime('%Y-%m-%d')}. You can also consider opting for an investment method to increase your variable salary.")
                     return render(request, "goal.html")
-                else:
+                elif savings_rate < 0:
                     messages.warning(request, "You are not currently saving any money. Please consider increasing your income or decreasing your expenses.")
                     return render(request, "goal.html")
             # Create the goal instance only if the deadline is valid
