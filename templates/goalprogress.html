@@ -41,7 +41,7 @@
                       <td >
                           <p style="color: red;">You didn't complete this goal under your deadline.</p>
                         </td>
-                      {% elif goal.remaindays <= 15 and goal.remainmonth <= 1 %}
+                      {% elif goal.remaindays <= 15 and goal.remainmonth <= 1 and goal.remainyear < 1%}
                       <td >
                         <p style="color: orange;">Goal deadline approaching!</p>
                       </td>
@@ -414,4 +414,4 @@
     </section>
 
   </main><!-- End #main -->
-{% endblock body%}
+{% endblock body%}
