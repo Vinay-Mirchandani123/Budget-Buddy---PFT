@@ -36,12 +36,12 @@
                     <td>{{ goal.remainmonth}}month </td>
                     <td>{{ goal.remaindays}}days </td>
                     <td>Rs {{ goal.remainingamount}} </td>
-                    {% if goal.remainingamount != 0 and goal.remainmonth >= 0 %}
-                      {% if goal.remaindays <= 0 %}
+                    {% if goal.remainingamount > 0 %}
+                      {% if goal.remaindays <= 0 and goal.remainmonth <= 0%}
                       <td >
                           <p style="color: red;">You didn't complete this goal under your deadline.</p>
                         </td>
-                      {% elif goal.remaindays <= 15 %}
+                      {% elif goal.remaindays <= 15 and goal.remainmonth <= 1 %}
                       <td >
                         <p style="color: orange;">Goal deadline approaching!</p>
                       </td>
@@ -51,13 +51,13 @@
                           <p style="color: green;">Good to go!</p>
                       </td>
                       {% endif %}
-                  {% else %}
+                    {% else %}
                       {% if goal.remaindays >= 0 and goal.remainingamount == 0 %}
                       <td>
                           <p style="color: blue;">Congratulations, you did it!</p>
                       </td>
                       {% endif %}
-    {% endif %}
+                    {% endif %}
                     {% comment %} {% if goal.remainday <= 0 and goal.remainingamount != 0 %}
                       <td class="alert alert-danger" role="alert">
                         Alert:your deadline has expired but you have not acheived
@@ -280,16 +280,6 @@
                         pointBorderColor: '#fff',
                         pointHoverBackgroundColor: '#fff',
                         pointHoverBorderColor: 'rgb(255, 99, 132)'
-                      }, {
-                        label: 'kaam krna h isme',
-                        data: [28, 48, 40, 19, 96, 27, 100],
-                        fill: true,
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgb(54, 162, 235)',
-                        pointBackgroundColor: 'rgb(54, 162, 235)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(54, 162, 235)'
                       }]
                     },
                     options: {
@@ -361,26 +351,11 @@
                         label: 'Goal Amount',
                         data: {{ goal_amounts|safe }},
                           backgroundColor: 'rgb(255, 99, 132)',
-                        },
-                        {
-                          label: 'kAAm krna h',
-                          data: [-11, -1, 12, 62, 95],
-                          backgroundColor: 'rgb(75, 192, 192)',
-                        },
-                        {
-                          label: 'kaam krna h',
-                          data: [-44, -5, 22, 35, 62],
-                          backgroundColor: 'rgb(255, 205, 86)',
-                        },
+                        }
                       ]
                     },
                     options: {
-                      plugins: {
-                        title: {
-                          display: true,
-                          text: 'Chart.js Bar Chart - Stacked'
-                        },
-                      },
+                      
                       responsive: true,
                       scales: {
                         x: {
@@ -424,15 +399,7 @@
                     },
                     options: {
                       responsive: true,
-                      plugins: {
-                        legend: {
-                          position: 'top',
-                        },
-                        title: {
-                          display: true,
-                          text: 'Chart.js Bubble Chart'
-                        }
-                      }
+          
                     }
                   });
            
@@ -447,4 +414,4 @@
     </section>
 
   </main><!-- End #main -->
-{% endblock body%}
+{% endblock body%}

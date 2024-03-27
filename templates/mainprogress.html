@@ -32,7 +32,7 @@
                 var myChart = new Chart(ctx, {
                     type: 'line',
                     data: {
-                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)'],
+                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)','saving'],
                       datasets: [{
                           label: 'Values',
                           data: [
@@ -40,7 +40,8 @@
                               {{ salary_fix_total }},
                               {{ salary_var_total }},
                               {{ expense_fix_total }},
-                              {{ expense_var_total }}
+                              {{ expense_var_total }},
+                              {{savings}}
                           ],
                           backgroundColor: [
                               'rgba(255, 99, 132, 0.5)',
@@ -191,7 +192,7 @@
                 var myChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
-                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)'],
+                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)','saving'],
                       datasets: [{
                           label: 'Values',
                           data: [
@@ -199,7 +200,8 @@
                               {{ salary_fix_total }},
                               {{ salary_var_total }},
                               {{ expense_fix_total }},
-                              {{ expense_var_total }}
+                              {{ expense_var_total }},
+                              {{savings}}
                           ],
                           backgroundColor: [
                               'rgba(255, 99, 132, 0.5)',
@@ -246,7 +248,7 @@
         var myChart = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)'],
+                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)','saving'],
                       datasets: [{
                           label: 'Values',
                           data: [
@@ -254,7 +256,8 @@
                               {{ salary_fix_total }},
                               {{ salary_var_total }},
                               {{ expense_fix_total }},
-                              {{ expense_var_total }}
+                              {{ expense_var_total }},
+                              {{savings}}
                           ],
                           backgroundColor: [
                               'rgba(255, 99, 132, 0.5)',
@@ -301,7 +304,7 @@
                 var myChart = new Chart(ctx, {
                     type: 'radar',
                     data: {
-                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)'],
+                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)','saving'],
                       datasets: [{
                           label: 'Values',
                           data: [
@@ -309,7 +312,8 @@
                               {{ salary_fix_total }},
                               {{ salary_var_total }},
                               {{ expense_fix_total }},
-                              {{ expense_var_total }}
+                              {{ expense_var_total }},
+                              {{savings}}
                           ],
                           backgroundColor: [
                               'rgba(255, 99, 132, 0.5)',
@@ -356,7 +360,7 @@
                 var myChart = new Chart(ctx, {
                     type: 'polarArea',
                     data: {
-                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)'],
+                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)','saving'],
                       datasets: [{
                           label: 'Values',
                           data: [
@@ -364,7 +368,8 @@
                               {{ salary_fix_total }},
                               {{ salary_var_total }},
                               {{ expense_fix_total }},
-                              {{ expense_var_total }}
+                              {{ expense_var_total }},
+                              {{savings}}
                           ],
                           backgroundColor: [
                               'rgba(255, 99, 132, 0.5)',
@@ -411,7 +416,7 @@
                 var myChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)'],
+                      labels: ['Total Goal Amount', 'Salary (Fixed)', 'Salary (Variable)', 'Expense (Fixed)', 'Expense (Variable)','saving'],
                       datasets: [{
                           label: 'Values',
                           data: [
@@ -419,7 +424,8 @@
                               {{ salary_fix_total }},
                               {{ salary_var_total }},
                               {{ expense_fix_total }},
-                              {{ expense_var_total }}
+                              {{ expense_var_total }},
+                              {{savings}}
                           ],
                           backgroundColor: [
                               'rgba(255, 99, 132, 0.5)',
@@ -500,4 +506,4 @@
     </section>
 
   </main><!-- End #main -->
-{% endblock body%}
+{% endblock body%}

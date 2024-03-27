@@ -21,7 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns # new
 
-admin.site.site_header = "Busget Buddy"
+admin.site.site_header = "Budget Buddy"
 admin.site.site_title = "Budget Buddy Admin Portal"
 admin.site.index_title = "Welcome to Budget Buddy"
 

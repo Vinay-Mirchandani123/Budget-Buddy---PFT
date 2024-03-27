@@ -23,8 +23,7 @@
                 {% include "alert.html" %}
                 <!-- Salary Name Input -->
                 <div class="form-group">
-                    <label for="exp_name">Expense Name:</label>
-                    <input type="text" id="exp_name" name="exp_name" class="form-control" required>
+                    <h4>Enter your Expense(p.m.)</h4>
                 </div>
                 <!-- Fixed Salary Input -->
                 <div class="form-group">
@@ -37,8 +36,10 @@
                     <input type="number" id="var_expense" name="var_expense" class="form-control" required>
                 </div>
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary">Submit Expense</button>
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px;" >Submit Expense</button>
             </form>
+            <!-- Edit Button -->
+            <button type="button" id="editButton" class="btn btn-secondary" style="margin-top: 20px;" onclick="enableForm()">Edit</button>
         </section>
     </div><!-- End Container -->
 
@@ -52,5 +53,14 @@
             });
         }
     };
+    function enableForm() {
+        console.log('enableForm function called');
+        document.getElementById('expenseForm').querySelectorAll('input, .btn-primary').forEach(function(element) {
+            console.log('Enabling element:', element);
+            element.disabled = false;
+        });
+        console.log('Disabling Edit button');
+        document.getElementById('editButton').disabled = true;
+    }
 </script>
 {% endblock body %}

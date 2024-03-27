@@ -71,11 +71,9 @@ def dashboard(request):
     goal_labels = [goal.goal_name for goal in goals]
     goal_amounts = [goal.amount for goal in goals]
     goal_time=[goal.start_time for goal in goals]
-    salary_labels = [salary.sal_name for salary in salaries]
     salary_var = [salary.var_salary for salary in salaries]
     salary_fix = [salary.fix_salary for salary in salaries]
     sal_time=[salary.time for salary in salaries]
-    expense_labels = [expense.exp_name for expense in expenses]
     expense_fix = [expense.fix_expense for expense in expenses]
     expense_var = [expense.var_expense for expense in expenses]
     exp_time=[expense.time for expense in expenses]
@@ -93,11 +91,9 @@ def dashboard(request):
         'goal_labels': goal_labels,
         'goal_amounts': goal_amounts, 
         'goal_time': goal_time,
-        'expense_labels': expense_labels,
         'expense_fix': expense_fix,
         'expense_var': expense_var,
         'exp_time':exp_time,
-        'salary_labels': salary_labels,
         'salary_var': salary_var,
         'salary_fix': salary_fix,
         'sal_time':sal_time,
@@ -135,11 +131,9 @@ def goalprogress(request):
     
     savings = salary_fix_total+salary_var_total - expense_fix_total-expense_var_total
     remainsavings=savings
-    salary_labels = [salary.sal_name for salary in salaries]
     salary_var = [salary.var_salary for salary in salaries]
     salary_fix = [salary.fix_salary for salary in salaries]
     sal_time=[salary.time for salary in salaries]
-    expense_labels = [expense.exp_name for expense in expenses]
     expense_fix = [expense.fix_expense for expense in expenses]
     expense_var = [expense.var_expense for expense in expenses]
     exp_time=[expense.time for expense in expenses]
@@ -174,11 +168,9 @@ def goalprogress(request):
         'goal_time': goal_time,
         'goal_deadline': goal_deadlines,
         'goals':goals,
-        'expense_labels': expense_labels,
         'expense_fix': expense_fix,
         'expense_var': expense_var,
         'exp_time':exp_time,
-        'salary_labels': salary_labels,
         'salary_var': salary_var,
         'salary_fix': salary_fix,
         'sal_time':sal_time,
@@ -197,14 +189,11 @@ def goalprogress(request):
 def expenseprogress(request):
     expenses = Expense.objects.filter(user=request.user)
     # Prepare data for chart
-    
-    expense_labels = [expense.exp_name for expense in expenses]
     expense_fix = [expense.fix_expense for expense in expenses]
     expense_var = [expense.var_expense for expense in expenses]
     exp_time=[expense.time for expense in expenses]
     # Pass data to the template
     context = {
-        'expense_labels': expense_labels,
         'expense_fix': expense_fix,
         'expense_var': expense_var,
         'exp_time':exp_time
@@ -216,14 +205,11 @@ def incomeprogress(request):
     # Retrieve data from models
     
     salaries = Salary.objects.filter(user=request.user)
-    salary_labels = [salary.sal_name for salary in salaries]
     salary_var = [salary.var_salary for salary in salaries]
     salary_fix = [salary.fix_salary for salary in salaries]
     sal_time=[salary.time for salary in salaries]
     # Pass data to the template
     context = {
-        
-        'salary_labels': salary_labels,
         'salary_var': salary_var,
         'salary_fix': salary_fix,
         'sal_time':sal_time
@@ -256,16 +242,13 @@ def mainprogress(request):
     expense_fix_total = sum(e.fix_expense for e in expenses)
     expense_var_total = sum(e.var_expense for e in expenses)
     
-    savings = salary_fix_total - expense_fix_total
-    remainsavings=savings
+    savings = salary_fix_total+salary_var_total - expense_fix_total-expense_var_total
     goal_labels = [goal.goal_name for goal in goals]
     goal_amounts = [goal.amount for goal in goals]
     goal_time=[goal.time for goal in goals]
-    salary_labels = [salary.sal_name for salary in salaries]
     salary_var = [salary.var_salary for salary in salaries]
     salary_fix = [salary.fix_salary for salary in salaries]
     sal_time=[salary.time for salary in salaries]
-    expense_labels = [expense.exp_name for expense in expenses]
     expense_fix = [expense.fix_expense for expense in expenses]
     expense_var = [expense.var_expense for expense in expenses]
     exp_time=[expense.time for expense in expenses]
@@ -274,11 +257,9 @@ def mainprogress(request):
         'goal_labels': goal_labels,
         'goal_amounts': goal_amounts, 
         'goal_time': goal_time,
-        'expense_labels': expense_labels,
         'expense_fix': expense_fix,
         'expense_var': expense_var,
         'exp_time':exp_time,
-        'salary_labels': salary_labels,
         'salary_var': salary_var,
         'salary_fix': salary_fix,
         'sal_time':sal_time,
@@ -289,7 +270,6 @@ def mainprogress(request):
         'expense_var_total': expense_var_total,
         'savings':savings,
         'goals':goals,
-        'remainsavings':remainsavings
     }
 
     return render(request, "mainprogress.html",context)
@@ -331,8 +311,9 @@ def mainprogress(request):
 
 def salary(request, username):
     global count
+    # Fetch the existing salary data if it exists
+    salary = Salary.objects.filter(user=username).first()
     if request.method == "POST":
-        sal_name=request.POST['sal_name']
         fix_salary = request.POST["fix_salary"]
         var_salary = request.POST["var_salary"]
         user = username
@@ -342,14 +323,21 @@ def salary(request, username):
         month=start_time.month
         day=start_time.day
         time = year * 100 + month
-        start_date = Salary.objects.filter(user=username).order_by('-start_time').first()
-        if start_date is not None and start_date.start_time is not None and (datetime.now().date() > start_date.start_time + timedelta(days=30*count) and datetime.now().date() < start_date.start_time + timedelta(days=30*(count+1))):
-            totalsalary=int(int(fix_salary)+int(var_salary))
-            count+=1
-        income = Salary(totalsalary=totalsalary,sal_name=sal_name,user=user,fix_salary=fix_salary, var_salary=var_salary,start_time=start_time, time=time,last_salary_date=datetime.now())
-        income.save()
+        # If salary data exists, update it
+        if salary is not None:
+            salary.fix_salary = fix_salary
+            salary.var_salary = var_salary
+            salary.totalsalary = totalsalary
+            salary.start_time = start_time
+            salary.time = time
+            salary.last_salary_date = datetime.now()
+            salary.save()
+        else:
+            # If salary data does not exist, create it
+            salary = Salary(totalsalary=totalsalary,user=user,fix_salary=fix_salary, var_salary=var_salary,start_time=start_time, time=time,last_salary_date=datetime.now())
+            salary.save()
         messages.success(request, "Income entered successfully")
-        # Check if a month has passed since the last salary entry
+    # Check if a month has passed since the last salary entry
     last_salary = Salary.objects.filter(user=username).order_by('-last_salary_date').first()
     if last_salary is not None and last_salary.last_salary_date is not None and datetime.now().date() < last_salary.last_salary_date + timedelta(days=30):
         form_enabled = False
@@ -357,13 +345,14 @@ def salary(request, username):
     else:
         form_enabled = True
 
-    return render(request, "salary.html", {"form_enabled": form_enabled})
+    return render(request, "salary.html", {"form_enabled": form_enabled, "salary": salary})
 
 
-def expense(request,username):
+
+def expense(request, username):
+    # Fetch the existing expense data if it exists
+    expense = Expense.objects.filter(user=username).first()
     if request.method == "POST":
-        
-        exp_name = request.POST["exp_name"]
         fix_expense = request.POST["fix_expense"]
         var_expense = request.POST["var_expense"]
         user = username
@@ -373,18 +362,29 @@ def expense(request,username):
         month=start_time.month
         day=start_time.day
         time = year * 100 + month
-        kharcha = Expense(
-          last_expense_date=datetime.now(),totalexpense=totalexpense, user=user, exp_name=exp_name, fix_expense=fix_expense, var_expense=var_expense,start_time=start_time, time=time
-        )
-        kharcha.save()
-        messages.success(request, "expense entered successfully")
+        # If expense data exists, update it
+        if expense is not None:
+            expense.fix_expense = fix_expense
+            expense.var_expense = var_expense
+            expense.totalexpense = totalexpense
+            expense.start_time = start_time
+            expense.time = time
+            expense.last_expense_date = datetime.now()
+            expense.save()
+        else:
+            # If expense data does not exist, create it
+            expense = Expense(totalexpense=totalexpense, user=user, fix_expense=fix_expense, var_expense=var_expense, start_time=start_time, time=time, last_expense_date=datetime.now())
+            expense.save()
+        messages.success(request, "Expense entered successfully")
+    # Check if a day has passed since the last expense entry
     last_expense = Expense.objects.filter(user=username).order_by('-last_expense_date').first()
-    if last_expense is not None and last_expense.last_expense_date is not None and datetime.now().date() < last_expense.last_expense_date + timedelta(days=1):
+    if last_expense is not None and last_expense.last_expense_date is not None and datetime.now().date() < last_expense.last_expense_date + timedelta(days=30):
         form_enabled = False
-        messages.success(request, "You have entered your Expense, Now you can enter it after 30 days")
+        messages.success(request, "You have entered your Expense, Now you can enter it after 1 day")
     else:
         form_enabled = True
-    return render(request, "expense.html",{"form_enabled": form_enabled})
+    return render(request, "expense.html", {"form_enabled": form_enabled, "expense": expense})
+
 
 
 def goal(request,username):
@@ -392,7 +392,7 @@ def goal(request,username):
     expense_exists = Expense.objects.filter(user=username).exists()
 
     if not income_exists or not expense_exists:
-        messages.error(request, "Please enter your income and expense first.")
+        messages.warning(request, "Please enter your income and expense first.")
         return redirect("/goal/salary/user.username")
     if request.method == "POST":
         goalDeadline = request.POST["goalDeadline"]
@@ -440,8 +440,29 @@ def goal(request,username):
                     required_expense_reduction = int(int(amount) - (savings_rate*remaining_month))
                 if savings_rate > 0 and required_expense_reduction > 0:
                     required_months = int(amount) / savings_rate
-                    new_deadline = datetime.now() + timedelta(days=required_months*30)
-                    messages.warning(request, f"Your current income and expense are not enough to meet the goal amount. You need to reduce your expense by at least Rs. {required_expense_reduction} or If you donot want to decrease your expense, you should increase your goal deadline to {new_deadline.strftime('%Y-%m-%d')}. You can also consider opting for an investment method to increase your variable salary.")
+                    if (start_time.month+required_months) > 12:
+                        required_year =int((start_time.month+required_months)/12)+start_time.year
+                        required_month= int(start_time.month+required_months)%12
+                        req=float((start_time.month+required_months)%12-required_month)*calendar.monthrange(required_year, required_month)[1]
+                        required_days = int(start_time.day+req)+1
+                        
+                        if required_days>calendar.monthrange(required_year, required_month)[1]:
+                            required_days=required_days-calendar.monthrange(required_year, required_month)[1]
+                            required_month=required_month+1
+                            if required_month > 12:
+                                required_year=required_year+1
+                                required_month=required_month/12
+                                required_days=required_days-calendar.monthrange(required_year, required_month)[1]
+                            
+                            
+                        
+                    else:
+                        required_year = start_time.year
+                        required_month = required_months/12+start_time.month
+                        required_days = remaining_days
+                        
+                    
+                    messages.warning(request, f"Your current income and expense are not enough to meet the goal amount. You need to reduce your expense by at least Rs. {required_expense_reduction} or If you donot want to decrease your expense, you should increase your goal deadline to {required_year}-{required_month}-{required_days}. You can also consider opting for an investment method to increase your variable salary.")
                     return render(request, "goal.html")
                 elif savings_rate < 0:
                     messages.warning(request, "You are not currently saving any money. Please consider increasing your income or decreasing your expenses.")
@@ -464,7 +485,7 @@ def goal(request,username):
             achieve.save()
             messages.success(request, "Goal entered successfully")
         else:
-            messages.warning(request, "Invalid deadline. Deadline should be greater than today's date.")
+            messages.warning(request, "Invalid deadline. Deadline should be greater than today date.")
     # if request.method == "POST":
     #     goalDeadline = request.POST["goalDeadline"]
         
@@ -545,4 +566,4 @@ class goalDataView(APIView):
     def get(self, request):
         data = Goal.objects.all()
         serializer = goalDataSerializer(data, many=True)
-        return JsonResponse(serializer.data,  safe=False)
+        return JsonResponse(serializer.data, safe=False)

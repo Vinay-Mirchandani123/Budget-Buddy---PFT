@@ -1,48 +1,61 @@
 {% extends "base1.html" %}
 {% load static %}
+
 {% block body %}
 <main id="main" class="main">
+    {% comment %} 
+    <div class="pagetitle">
+        <h1></h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html"></a></li>
+                <li class="breadcrumb-item"></li>
+                <li class="breadcrumb-item active"></li>
+            </ol>
+        </nav>
+    </div> 
+    {% endcomment %}
 
-    {% comment %} <div class="pagetitle">
-      <h1></h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html"></a></li>
-          <li class="breadcrumb-item"></li>
-          <li class="breadcrumb-item active"></li>
-        </ol>
-      </nav>
-    </div> {% endcomment %}
-
-    {% comment %} <p></p> {% endcomment %}
+    {% comment %} 
+    <p></p> 
+    {% endcomment %}
+    
     <div class="container">
         <section id="salary">
             <h2>Income Information</h2>
+
+            <!-- Salary Form -->
             <form id="salaryForm" method="post" action="/goal/salary/{{ user.username }}/">
                 {% csrf_token %}
                 {% include "alert.html" %}
+
                 <!-- Salary Name Input -->
                 <div class="form-group">
-                    <label for="sal_name">Income Name:</label>
-                    <input type="text" id="sal_name" name="sal_name" class="form-control" required>
+                    <h4>Enter your Income(p.m.)</h4>
                 </div>
+
                 <!-- Fixed Salary Input -->
                 <div class="form-group">
                     <label for="fix_salary">Fixed Income (in Rs):</label>
                     <input type="number" id="fix_salary" name="fix_salary" class="form-control" required>
                 </div>
+
                 <!-- Variable Salary Input -->
                 <div class="form-group">
                     <label for="var_salary">Variable Income (in Rs):</label>
                     <input type="number" id="var_salary" name="var_salary" class="form-control" required>
                 </div>
-                <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary">Submit Income</button>
+
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Submit Income</button>
             </form>
+
+            <!-- Edit Button -->
+            <button type="button" id="editButton" class="btn btn-secondary" onclick="enableForm()" style="margin-top: 20px;">Edit</button>
         </section>
     </div><!-- End Container -->
-
 </main>
+
+<!-- JavaScript Section -->
 <script>
     window.onload = function() {
         var formEnabled = {{ form_enabled|yesno:"true,false" }};
@@ -52,5 +65,15 @@
             });
         }
     };
+
+    function enableForm() {
+        console.log('enableForm function called');
+        document.getElementById('salaryForm').querySelectorAll('input, .btn-primary').forEach(function(element) {
+            console.log('Enabling element:', element);
+            element.disabled = false;
+        });
+        console.log('Disabling Edit button');
+        document.getElementById('editButton').disabled = true;
+    }
 </script>
 {% endblock body %}
