@@ -1,9 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from base.models import BaseModel
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from base.emails import account_activation_email
+from .managers import UserManager
 import uuid
 
 
@@ -27,6 +28,13 @@ import uuid
 #             account_activation_email(email, email_token)
 #     except Exception as e:
 #         print(e)
+
+class User(AbstractUser):
+    phone_number=models.CharField(max_length=12, unique=True)
+    # phone_verified=models.BooleanField(default=False)
+    # otp=models.CharField(max_length=6)
+    REQUIRED_FIELDS=['phone_number']
+    objects= UserManager()
 
 class Editprofile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

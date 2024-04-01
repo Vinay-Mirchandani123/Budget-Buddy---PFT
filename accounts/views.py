@@ -1,9 +1,8 @@
 from django.shortcuts import render,redirect,HttpResponse
 from django.http import HttpResponseRedirect
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout,get_user
 from django.contrib import messages
-from .models import Editprofile
+from .models import Editprofile,User
 from base.emails import account_activation_email
 from django.contrib.auth.decorators import login_required
 
@@ -51,6 +50,7 @@ def register(request):
         firstName=request.POST['firstName']
         lastName=request.POST['lastName']
         email=request.POST['email']
+        phonenumber=request.POST['phonenumber']
         password=request.POST['password']
         conpassword=request.POST['conpassword']
 
@@ -65,7 +65,7 @@ def register(request):
         if user.exists():
             messages.warning(request, "Email already exist")
             return HttpResponseRedirect(request.path_info)
-        user = User.objects.create_user(username=email, email=email, password=password)
+        user = User.objects.create_user(username=email, email=email, password=password, phone_number=phonenumber)
         user.first_name= firstName
         user.last_name = lastName
         user.save()

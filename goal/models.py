@@ -10,8 +10,9 @@ class Salary(models.Model):
     time=models.IntegerField(null=False, blank=False)
     totalsalary=models.IntegerField(null=False, blank=False)
     last_salary_date=models.DateField(null=True, blank=True)
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.user
+    
     
 
 class Expense(models.Model):
@@ -24,8 +25,8 @@ class Expense(models.Model):
     last_expense_date=models.DateField(null=True, blank=True)
     
     
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.user
 
 class Goal(models.Model):
     user = models.CharField(max_length=100)
@@ -40,6 +41,6 @@ class Goal(models.Model):
     remainingamount=models.IntegerField(null=False, blank=False)
     days_in_month=models.IntegerField(null=False, blank=False)
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.user
 
