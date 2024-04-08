@@ -40,6 +40,7 @@ class Goal(models.Model):
     time=models.IntegerField(null=False, blank=False)
     remainingamount=models.IntegerField(null=False, blank=False)
     days_in_month=models.IntegerField(null=False, blank=False)
+    percentage=models.IntegerField(null=True, blank=False)
 
     def __str__(self):
         return self.user

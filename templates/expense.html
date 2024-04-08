@@ -2,7 +2,6 @@
 {% load static %}
 {% block body %}
 <main id="main" class="main">
-
     {% comment %} <div class="pagetitle">
       <h1>Chart.js</h1>
       <nav>
@@ -23,17 +22,18 @@
                 {% include "alert.html" %}
                 <!-- Salary Name Input -->
                 <div class="form-group">
-                    <h4>Enter your Expense(p.m.)</h4>
+                  <h4>Enter your Expense(p.m.)</h4>
                 </div>
+                <input type="hidden" id="expense_id" name="expense_id">
                 <!-- Fixed Salary Input -->
                 <div class="form-group">
-                    <label for="fix_expense">Fixed Expense (in Rs):</label>
-                    <input type="number" id="fix_expense" name="fix_expense" class="form-control" required>
+                  <label for="fix_expense">Fixed Expense (in Rs):</label>
+                  <input type="number" id="fix_expense" name="fix_expense" class="form-control" required>
                 </div>
                 <!-- Variable Salary Input -->
                 <div class="form-group">
-                    <label for="var_expense">Variable Expense (in Rs):</label>
-                    <input type="number" id="var_expense" name="var_expense" class="form-control" required>
+                  <label for="var_expense">Variable Expense (in Rs):</label>
+                  <input type="number" id="var_expense" name="var_expense" class="form-control" required>
                 </div>
                 <!-- Submit Button -->
                 <button type="submit" class="btn btn-primary" style="margin-top: 20px;" >Submit Expense</button>
@@ -43,24 +43,55 @@
         </section>
     </div><!-- End Container -->
 
+    <div class="pagetitle" style="margin-top: 20px;">
+      <h1>Expenses</h1>
+      <nav>
+          <table class="table">
+              <thead>
+                  <tr>
+                      <th>Fixed expense</th>
+                      <th>Variable expense</th>
+                      <th>Start Time</th>
+                      <th>Total expense</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for exp in expenses %}
+          <tr>
+            <td>Rs {{ exp.fix_expense }}</td>
+            <td>Rs {{ exp.var_expense }}</td>
+            <td>{{ exp.start_time }}</td>
+            <td>Rs {{ exp.totalexpense }}</td>
+            
+        </tr>
+          {% endfor %}
+              </tbody>
+          </table>
+        </div>
+    </div>
+
 </main>
 <script>
-    window.onload = function() {
-        var formEnabled = {{ form_enabled|yesno:"true,false" }};
-        if (!formEnabled) {
-            document.getElementById('expenseForm').querySelectorAll('input, button').forEach(function(element) {
-                element.disabled = true;
-            });
-        }
-    };
-    function enableForm() {
-        console.log('enableForm function called');
-        document.getElementById('expenseForm').querySelectorAll('input, .btn-primary').forEach(function(element) {
-            console.log('Enabling element:', element);
-            element.disabled = false;
-        });
-        console.log('Disabling Edit button');
-        document.getElementById('editButton').disabled = true;
-    }
+  window.onload = function() {
+      var formEnabled = {{ form_enabled|yesno:"true,false" }};
+      if (!formEnabled) {
+          document.getElementById('expenseForm').querySelectorAll('input, button').forEach(function(element) {
+              element.disabled = true;
+          });
+      }
+  };
+  function enableForm() {
+      console.log('enableForm function called');
+      document.getElementById('expenseForm').querySelectorAll('input, .btn-primary').forEach(function(element) {
+          console.log('Enabling element:', element);
+          element.disabled = false;
+      });
+      console.log('Disabling Edit button');
+      document.getElementById('editButton').disabled = true;
+  }
 </script>
 {% endblock body %}
+
+
+{% comment %} // Populate the hidden field with the expense ID
+      document.getElementById('expense_id').value = '{{ expense.id }}'; {% endcomment %}

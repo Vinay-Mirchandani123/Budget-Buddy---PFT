@@ -12,7 +12,8 @@ from rest_framework.response import Response
 from django.views import View
 from .models import *
 from .serializers import *
-from datetime import datetime,timedelta
+from django.shortcuts import render
+from datetime import datetime,timedelta,date
 import calendar
 from django.db.models import Sum
 count=1
@@ -116,6 +117,18 @@ def goalprogress(request):
     salaries = Salary.objects.filter(user=request.user)
     expenses=Expense.objects.filter(user=request.user)
     # Prepare data for chart
+    if request.method == 'POST':
+        for goal in goals:
+            # Get the percentage value from the form
+            percentage = request.POST.get(f'progress_{goal.id}')
+            if percentage:
+                # Update the goal's percentage value and save it
+                goal.percentage = int(percentage)
+                goal.save()
+        
+        messages.success(request, "Progress updated successfully.")
+        return redirect('goalprogress')
+    # Prepare data for chart
     
     goal_labels = [goal.goal_name for goal in goals]
     goal_amounts = [goal.amount for goal in goals]
@@ -154,10 +167,12 @@ def goalprogress(request):
         goal.remainingamount = goal.amount
         goal.save()
     for goal in goals:
+        if goal.percentage is None:
+            goal.percentage =100
         if savings > 0:
-            if goal.remainingamount >= savings:
-                goal.remainingamount -= savings
-                savings = 0
+            if goal.remainingamount >= savings*(goal.percentage/100):
+                goal.remainingamount -= savings*(goal.percentage/100)
+                savings = savings-savings*(goal.percentage/100)
             else:
                 savings -= goal.remainingamount
                 goal.remainingamount = 0
@@ -311,8 +326,10 @@ def mainprogress(request):
 
 def salary(request, username):
     global count
-    # Fetch the existing salary data if it exists
-    salary = Salary.objects.filter(user=username).first()
+    # Fetch the latest expense data if it exists
+    salary = Salary.objects.filter(user=username).order_by('-start_time')
+    # last_salary = expenses.first()
+    # salary = Salary.objects.filter(user=username).first()
     if request.method == "POST":
         fix_salary = request.POST["fix_salary"]
         var_salary = request.POST["var_salary"]
@@ -323,73 +340,128 @@ def salary(request, username):
         month=start_time.month
         day=start_time.day
         time = year * 100 + month
-        # If salary data exists, update it
-        if salary is not None:
-            salary.fix_salary = fix_salary
-            salary.var_salary = var_salary
-            salary.totalsalary = totalsalary
-            salary.start_time = start_time
-            salary.time = time
-            salary.last_salary_date = datetime.now()
-            salary.save()
-        else:
-            # If salary data does not exist, create it
-            salary = Salary(totalsalary=totalsalary,user=user,fix_salary=fix_salary, var_salary=var_salary,start_time=start_time, time=time,last_salary_date=datetime.now())
-            salary.save()
+        # If salary data does not exist, create it
+        salary_new = Salary(totalsalary=totalsalary,user=user,fix_salary=fix_salary, var_salary=var_salary,start_time=start_time, time=time,last_salary_date=datetime.now())
+        salary_new.save()
         messages.success(request, "Income entered successfully")
     # Check if a month has passed since the last salary entry
     last_salary = Salary.objects.filter(user=username).order_by('-last_salary_date').first()
-    if last_salary is not None and last_salary.last_salary_date is not None and datetime.now().date() < last_salary.last_salary_date + timedelta(days=30):
+    if last_salary is not None and last_salary.last_salary_date is not None and datetime.now().date() < last_salary.last_salary_date + timedelta(days=1):
         form_enabled = False
-        messages.success(request, "You have entered your Income, Now you can enter it after 30days")
+        messages.success(request, "You have entered your Income, Now you can enter it tommorrow")
     else:
         form_enabled = True
 
     return render(request, "salary.html", {"form_enabled": form_enabled, "salary": salary})
 
-
-
 def expense(request, username):
-    # Fetch the existing expense data if it exists
-    expense = Expense.objects.filter(user=username).first()
+    # Default value for form_enabled
+    form_enabled = False
+
+    # Fetch the latest expense data if it exists
+    expenses = Expense.objects.filter(user=username).order_by('-start_time')
+    last_expense = expenses.first()
+
     if request.method == "POST":
-        fix_expense = request.POST["fix_expense"]
-        var_expense = request.POST["var_expense"]
-        user = username
-        start_time=datetime.today()
-        totalexpense=int(int(var_expense)+int(fix_expense))
-        year=start_time.year
-        month=start_time.month
-        day=start_time.day
-        time = year * 100 + month
-        # If expense data exists, update it
-        if expense is not None:
-            expense.fix_expense = fix_expense
-            expense.var_expense = var_expense
-            expense.totalexpense = totalexpense
-            expense.start_time = start_time
-            expense.time = time
-            expense.last_expense_date = datetime.now()
-            expense.save()
+        fix_expense = request.POST.get("fix_expense", 0)
+        var_expense = request.POST.get("var_expense", 0)
+        totalexpense = int(fix_expense) + int(var_expense)
+        start_time = datetime.today()
+        time = start_time.year * 100 + start_time.month
+        last_expense_date = datetime.now()
+
+        # Check if an expense is being edited
+        if "expense_id" in request.POST and request.POST["expense_id"]:
+            # Update the existing expense
+            expense = Expense.objects.get(id=request.POST["expense_id"])
         else:
-            # If expense data does not exist, create it
-            expense = Expense(totalexpense=totalexpense, user=user, fix_expense=fix_expense, var_expense=var_expense, start_time=start_time, time=time, last_expense_date=datetime.now())
-            expense.save()
-        messages.success(request, "Expense entered successfully")
-    # Check if a day has passed since the last expense entry
-    last_expense = Expense.objects.filter(user=username).order_by('-last_expense_date').first()
-    if last_expense is not None and last_expense.last_expense_date is not None and datetime.now().date() < last_expense.last_expense_date + timedelta(days=30):
+            # Create a new expense
+            expense = Expense(totalexpense=totalexpense, user=username)
+
+        expense.fix_expense = fix_expense
+        expense.var_expense = var_expense
+        expense.totalexpense = totalexpense
+        expense.start_time = start_time
+        expense.time = time
+        expense.last_expense_date = last_expense_date
+        expense.save()
+
+        messages.success(request, "Expense updated successfully" if "expense_id" in request.POST else "Expense entered successfully")
+
+    elif last_expense is not None and date.today() < last_expense.start_time + timedelta(days=1):
         form_enabled = False
-        messages.success(request, "You have entered your Expense, Now you can enter it after 1 day")
-    else:
-        form_enabled = True
-    return render(request, "expense.html", {"form_enabled": form_enabled, "expense": expense})
+        messages.success(request, "You have entered your Expense for today.")
+    
+    return render(request, "expense.html", {"form_enabled": form_enabled, "expenses": expenses})
+
+
+
+# def expense(request, username):
+#     # Fetch the existing expense data if it exists
+#     expense = Expense.objects.filter(user=username).first()
+#     if request.method == "POST":
+#         fix_expense = request.POST["fix_expense"]
+#         var_expense = request.POST["var_expense"]
+#         user = username
+#         start_time=datetime.today()
+#         totalexpense=int(int(var_expense)+int(fix_expense))
+#         year=start_time.year
+#         month=start_time.month
+#         day=start_time.day
+#         time = year * 100 + month
+#         # If expense data exists, update it
+#         if expense is not None:
+#             expense.fix_expense = fix_expense
+#             expense.var_expense = var_expense
+#             expense.totalexpense = totalexpense
+#             expense.start_time = start_time
+#             expense.time = time
+#             expense.last_expense_date = datetime.now()
+#             expense.save()
+#         else:
+#             # If expense data does not exist, create it
+#             expense = Expense(totalexpense=totalexpense, user=user, fix_expense=fix_expense, var_expense=var_expense, start_time=start_time, time=time, last_expense_date=datetime.now())
+#             expense.save()
+#         messages.success(request, "Expense entered successfully")
+#     # Check if a day has passed since the last expense entry
+#     last_expense = Expense.objects.filter(user=username).order_by('-last_expense_date').first()
+#     if last_expense is not None and last_expense.last_expense_date is not None and datetime.now().date() < last_expense.last_expense_date + timedelta(days=1):
+#         form_enabled = False
+#         messages.success(request, "You have entered your Expense, Now you can enter it tommorrow")
+#     else:
+#         form_enabled = True
+#     return render(request, "expense.html", {"form_enabled": form_enabled, "expense": [expense]})
+
+# def edit_expense(request, username):
+#     # Fetch the latest expense data
+#     expense = Expense.objects.filter(user=username).last()
+#     if request.method == "POST":
+#         # Update the expense data with the form data
+#         expense.fix_expense = request.POST["fix_expense"]
+#         expense.var_expense = request.POST["var_expense"]
+#         expense.totalexpense = int(request.POST["var_expense"]) + int(request.POST["fix_expense"])
+#         expense.start_time = datetime.today()
+#         expense.time = expense.start_time.year * 100 + expense.start_time.month
+#         expense.last_expense_date = datetime.now()
+#         expense.save()
+#         messages.success(request, "Expense updated successfully")
+#         return redirect('expense')
+#     else:
+#         # Render the form with the existing expense data
+#         return render(request, "edit_expense.html", {"expense": expense})
 
 
 
 def goal(request,username):
     income_exists = Salary.objects.filter(user=username).exists()
     expense_exists = Expense.objects.filter(user=username).exists()
+    last_goal = Goal.objects.filter(user=username).order_by('-goalDeadline').first()
+    last_goal_amount1 = Goal.objects.filter(user=username).order_by('-amount').first()
+    if last_goal_amount1 is not None:
+        last_goal_amount = int(last_goal_amount1.amount)
+    else:
+        last_goal_amount=0
+
 
     if not income_exists or not expense_exists:
         messages.warning(request, "Please enter your income and expense first.")
@@ -406,6 +478,19 @@ def goal(request,username):
             days_in_month = calendar.monthrange(today.year, today.month)[1]
             start_time = datetime.today()
             remainingamount = amount
+            if last_goal:
+                last_goal_deadline = last_goal.goalDeadline
+                last_goal_month = last_goal_deadline.month-start_time.month
+                if last_goal_month <0:
+                    last_goal_month = 12-last_goal_month
+                last_goal_year = (abs(last_goal_deadline.year-start_time.year))*12
+                last_goal_day = abs(last_goal_deadline.day-start_time.day)
+                last_goal_month = last_goal_year+last_goal_month+1
+            else:
+                last_goal_month =0
+                last_goal_year = 0
+                last_goal_day=0
+            print(last_goal_month)
             if datetime.strptime(goalDeadline, '%Y-%m-%d').date().day < datetime.now().date().day:
                 remaining_month = (datetime.strptime(goalDeadline, '%Y-%m-%d').date().year - start_time.year) * 12 + \
                                (datetime.strptime(goalDeadline, '%Y-%m-%d').date().month - start_time.month) - 1
@@ -433,14 +518,17 @@ def goal(request,username):
             savings_rate = total_income - total_expense
 
             # Check if the user's salary and expense are enough to meet the goal amount
-            if savings_rate < int(amount):
+            if savings_rate < (int(amount)+last_goal_amount):
+                print(type(amount))
+                print(type(last_goal_amount))
                 if remaining_month > 0:
-                    required_expense_reduction = int((int(amount) - (savings_rate*remaining_month))/remaining_month)
+                    required_expense_reduction = int(((int(amount)+last_goal_amount) - (savings_rate*remaining_month))/remaining_month)
                 else :
                     required_expense_reduction = int(int(amount) - (savings_rate*remaining_month))
                 if savings_rate > 0 and required_expense_reduction > 0:
-                    required_months = int(amount) / savings_rate
-                    if (start_time.month+required_months) > 12:
+                    required_months = int((int(amount) / savings_rate) + last_goal_month)
+                    print(required_months)
+                    if (start_time.month+required_months) > 11:
                         required_year =int((start_time.month+required_months)/12)+start_time.year
                         required_month= int(start_time.month+required_months)%12
                         req=float((start_time.month+required_months)%12-required_month)*calendar.monthrange(required_year, required_month)[1]

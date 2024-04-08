@@ -3,85 +3,80 @@
 
 
 
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+
 {% block body %}
   <main id="main" class="main">
 
-    <div class="pagetitle">
-      <h1>Goals</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><div>
-            <table class="table">
-              <thead>
-                  <tr>
-                      <th>Goal Name</th>
-                      <th>Amount</th>
-                      <th>Start Time</th>
-                      <th>Goal Deadline</th>
-                      <th>Remaining year</th>
-                      <th>Remaining month</th>
-                      <th>Remaining days</th>
-                      <th>Remaining amount</th>
-                      <th>NOTIFICATION</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  {% for goal in goals %}
-                  <tr>
-                    <td>{{ goal.goal_name }}</td>
-                    <td>Rs {{ goal.amount }}</td>
-                    <td>{{ goal.start_time }}</td>
-                    <td>{{ goal.goalDeadline }}</td>
-                    <td>{{goal.remainyear}}year</td>
-                    <td>{{ goal.remainmonth}}month </td>
-                    <td>{{ goal.remaindays}}days </td>
-                    <td>Rs {{ goal.remainingamount}} </td>
-                    {% if goal.remainingamount > 0 %}
-                      {% if goal.remaindays <= 0 and goal.remainmonth <= 0%}
-                      <td >
-                          <p style="color: red;">You didn't complete this goal under your deadline.</p>
-                        </td>
-                      {% elif goal.remaindays <= 15 and goal.remainmonth <= 1 and goal.remainyear < 1%}
-                      <td >
-                        <p style="color: orange;">Goal deadline approaching!</p>
-                      </td>
-                          
-                      {% else %}
-                      <td>
-                          <p style="color: green;">Good to go!</p>
-                      </td>
-                      {% endif %}
-                    {% else %}
-                      {% if goal.remaindays >= 0 and goal.remainingamount == 0 %}
-                      <td>
-                          <p style="color: blue;">Congratulations, you did it!</p>
-                      </td>
-                      {% endif %}
-                    {% endif %}
-                    {% comment %} {% if goal.remainday <= 0 and goal.remainingamount != 0 %}
-                      <td class="alert alert-danger" role="alert">
-                        Alert:your deadline has expired but you have not acheived
-            
-                      </td>
-                    {% endif %}
-                    {% if goal.remainday > 0 and goal.remainingamount != 0 %}
-                      {% if goal.remainmonth <= 0 and goal.remaindays <= 15 %}
-                        <td class="alert alert-danger" role="alert">
-                          Alert: Goal deadline approaching!
-      
-                        </td>
-                      {% endif %}
-                      {% else %}
-                        <td> GOOD TO GO</td>
-                    {% endif %} {% endcomment %}
-                </tr>
-                  {% endfor %}
-              </tbody>
-          </table>
-        </div></li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
+    <div class="container">
+      <div class="pagetitle">
+        <h1>Goals</h1>
+              <div>
+                <form method="POST">
+                  {% csrf_token %}
+                  <div class="table-responsive" style="max-height: 400px;">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Goal Name</th>
+                          <th>Amount</th>
+                          <th>Start Time</th>
+                          <th>Goal Deadline</th>
+                          <th>Remaining Time</th>
+                          <th>Remaining Amount</th>
+                          <th>Notification</th>
+                          <th>Percentage (%)</th>
+                          <th>Progress</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for goal in goals %}
+                        <tr>
+                          <td>{{ goal.goal_name }}</td>
+                          <td>Rs {{ goal.amount }}</td>
+                          <td>{{ goal.start_time }}</td>
+                          <td>{{ goal.goalDeadline }}</td>
+                          <td>{{ goal.remainyear }} year, {{ goal.remainmonth }} month, {{ goal.remaindays }} days</td>
+                          <td>Rs {{ goal.remainingamount }}</td>
+                          <td>
+                            {% if goal.remainingamount > 0 %}
+                              {% if goal.remaindays <= 0 and goal.remainmonth <= 0 %}
+                                <p style="color: red;">You didn't complete this goal under your deadline.</p>
+                              {% elif goal.remaindays <= 15 and goal.remainmonth <= 1 and goal.remainyear < 1 %}
+                                <p style="color: orange;">Goal deadline approaching!</p>
+                              {% else %}
+                                <p style="color: green;">Good to go!</p>
+                              {% endif %}
+                            {% else %}
+                              {% if goal.remaindays >= 0 and goal.remainingamount == 0 %}
+                                <p style="color: blue;">Congratulations, you did it!</p>
+                              {% endif %}
+                            {% endif %}
+                          </td>
+                          <td>{{ goal.percentage }}%</td>
+                          <td>
+                            <input type="number" id="progress_{{ goal.id }}" name="progress_{{ goal.id }}" min="0" max="100" step="1">
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Update Progress</button>
+                </form>
+              </div>
+      </div>
+    </div>
+    
+    <style>
+      /* Custom styles for table responsiveness */
+      .table-responsive {
+        max-height: 400px; /* Set max height for the table div */
+        overflow-y: auto; /* Enable vertical scrolling */
+      }
+    </style>
+    <!-- End Page Title -->
 
     
     <section class="section">

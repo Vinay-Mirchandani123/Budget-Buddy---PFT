@@ -2,6 +2,30 @@
 {% load static %}
 {% block body %}
   <main id="main" class="main">
+    <section class="section">
+      <div class="row">
+        <div class="container">
+          <table class="table">
+              <thead>
+                  <tr>
+                      <th>variable income</th>
+                      <th>fixed income</th>
+                      <th>Start Time</th>
+                      <th>total income</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for sal in salaries %}
+                  <tr>
+                    <td>{{ sal.salary_var }}</td>
+                    <td>Rs {{ sal.salary_fix }}</td>
+                    <td>{{ sal.start_time }}</td>
+                    {% comment %} <td>{{ sal. }}</td> {% endcomment %}
+                </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+      </div>
 
     {% comment %} <div class="pagetitle">
       <h1>Chart.js</h1>
@@ -16,7 +40,6 @@
 
     <p>Chart.JS Examples. You can check the <a href="https://www.chartjs.org/docs/latest/samples/" target="_blank">official website</a> for more examples.</p> {% endcomment %}
 
-    <section class="section">
       <div class="row">
 
         <div class="col-lg-6">

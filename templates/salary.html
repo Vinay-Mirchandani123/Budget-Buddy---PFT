@@ -3,56 +3,57 @@
 
 {% block body %}
 <main id="main" class="main">
-    {% comment %} 
-    <div class="pagetitle">
-        <h1></h1>
-        <nav>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html"></a></li>
-                <li class="breadcrumb-item"></li>
-                <li class="breadcrumb-item active"></li>
-            </ol>
-        </nav>
-    </div> 
-    {% endcomment %}
-
-    {% comment %} 
-    <p></p> 
-    {% endcomment %}
-    
     <div class="container">
-        <section id="salary">
-            <h2>Income Information</h2>
+        <h2>Enter New Income Information</h2>
+        <form id="salaryForm" method="post" action="/goal/salary/{{ user.username }}/">
+            {% csrf_token %}
+            {% include "alert.html" %}
 
-            <!-- Salary Form -->
-            <form id="salaryForm" method="post" action="/goal/salary/{{ user.username }}/">
-                {% csrf_token %}
-                {% include "alert.html" %}
+            <div class="form-group">
+                <label for="fix_salary">Fixed Income (in Rs):</label>
+                <input type="number" id="fix_salary" name="fix_salary" class="form-control" required>
+            </div>
 
-                <!-- Salary Name Input -->
-                <div class="form-group">
-                    <h4>Enter your Income(p.m.)</h4>
-                </div>
+            <div class="form-group">
+                <label for="var_salary">Variable Income (in Rs):</label>
+                <input type="number" id="var_salary" name="var_salary" class="form-control" required>
+            </div>
 
-                <!-- Fixed Salary Input -->
-                <div class="form-group">
-                    <label for="fix_salary">Fixed Income (in Rs):</label>
-                    <input type="number" id="fix_salary" name="fix_salary" class="form-control" required>
-                </div>
+            <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Submit Income</button>
+        </form>
+    </div>
 
-                <!-- Variable Salary Input -->
-                <div class="form-group">
-                    <label for="var_salary">Variable Income (in Rs):</label>
-                    <input type="number" id="var_salary" name="var_salary" class="form-control" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Submit Income</button>
-            </form>
-
-            <!-- Edit Button -->
-            <button type="button" id="editButton" class="btn btn-secondary" onclick="enableForm()" style="margin-top: 20px;">Edit</button>
-        </section>
-    </div><!-- End Container -->
+    <!-- Edit Button -->
+    <div class="container">
+        <button type="button" id="editButton" class="btn btn-secondary" onclick="enableForm()" style="margin-top: 20px;">Edit</button>
+    </div>
+    <!-- Display User's Salary Information -->
+    <div class="pagetitle" style="margin-top: 20px;">
+        <h1>Income</h1>
+              <div>
+              <table class="table">
+                <thead>
+                    <tr>
+                        <th>Fixed income</th>
+                        <th>Variable income</th>
+                        <th>Start Time</th>
+                        <th>Total income</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sal in salary %}
+                    <tr>
+                      <td>Rs {{ sal.fix_salary }}</td>
+                      <td>Rs {{ sal.var_salary }}</td>
+                      <td>{{ sal.start_time }}</td>
+                      <td>Rs {{ sal.totalsalary }}</td>
+                      
+                  </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+          </div>
+      </div>
 </main>
 
 <!-- JavaScript Section -->
