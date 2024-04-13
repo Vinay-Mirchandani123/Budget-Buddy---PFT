@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block body %}
   <main id="main" class="main">
     <section class="section">
-      <div class="row">
+      {% comment %} <div class="row">
         <div class="container">
           <table class="table">
               <thead>
@@ -21,11 +22,11 @@
                     <td>Rs {{ sal.salary_fix }}</td>
                     <td>{{ sal.start_time }}</td>
                     {% comment %} <td>{{ sal. }}</td> {% endcomment %}
-                </tr>
+                {% comment %} </tr>
                   {% endfor %}
               </tbody>
           </table>
-      </div>
+      </div> {% endcomment %} 
 
     {% comment %} <div class="pagetitle">
       <h1>Chart.js</h1>
@@ -40,93 +41,33 @@
 
     <p>Chart.JS Examples. You can check the <a href="https://www.chartjs.org/docs/latest/samples/" target="_blank">official website</a> for more examples.</p> {% endcomment %}
 
-      <div class="row">
+     <div class="row">
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Bar Chart</h5>
 
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Line Chart</h5>
-
-              <!-- Line Chart -->
-              <canvas id="lineChart" style="max-height: 400px;"></canvas>
-              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-              <script>
-                var ctx = document.getElementById('lineChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-                    type: 'line',
+            <!-- Bar Chart -->
+            <div class="container1">
+              <div class="containerbody1">
+                <canvas id="barChart" style="max-height: 400px;"></canvas>
+              </div>
+            </div>
+            
+            
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+              var ctx = document.getElementById('barChart').getContext('2d');
+              var myChart2 = new Chart(ctx, {
+                  type: 'bar',
                     data: {
                       labels: {{ sal_time|safe }},
-                datasets: [{
-                    label: 'salary',
-                    data:{{ salary_var|safe }},
-                        fill: false,
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
-                      },{
-                        label: 'var sal',
-                        data: {{ salary_fix|safe }},
-                        fill: false,
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
-                      },
-                      ]
-                    },
-                    options: {
-                      scales: {
-                        y: {
-                          beginAtZero: true
-                        },
-                      }
-                    }
-                  });
-           
-              </script>
-              <!-- End Line CHart -->
+              datasets: [{
+                categoryPercentage: 0.1,
 
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Bar CHart</h5>
-
-              <!-- Bar Chart -->
-              <canvas id="barChart" style="max-height: 400px;"></canvas>
-              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-              <script>
-                var ctx = document.getElementById('barChart').getContext('2d');
-                var myChart = new Chart(ctx, {
-                    type: 'bar',
-                      data: {
-                        labels: {{ sal_time|safe }},
-                datasets: [{
-                     label: 'fix sal',
-                    data: {{ salary_fix|safe }},
-                        backgroundColor: [
-                          'rgba(255, 99, 132, 0.2)',
-                          'rgba(255, 159, 64, 0.2)',
-                          'rgba(255, 205, 86, 0.2)',
-                          'rgba(75, 192, 192, 0.2)',
-                          'rgba(54, 162, 235, 0.2)',
-                          'rgba(153, 102, 255, 0.2)',
-                          'rgba(201, 203, 207, 0.2)'
-                        ],
-                        borderColor: [
-                          'rgb(255, 99, 132)',
-                          'rgb(255, 159, 64)',
-                          'rgb(255, 205, 86)',
-                          'rgb(75, 192, 192)',
-                          'rgb(54, 162, 235)',
-                          'rgb(153, 102, 255)',
-                          'rgb(201, 203, 207)'
-                        ],
-                        borderWidth: 1
-                      },{
-                        label: 'var sal',
-                        data: {{ salary_var|safe }},
-                        backgroundColor: [
+                   label: 'fix sal',
+                  data: {{ salary_fix|safe }},
+                      backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(255, 159, 64, 0.2)',
                         'rgba(255, 205, 86, 0.2)',
@@ -144,34 +85,131 @@
                         'rgb(153, 102, 255)',
                         'rgb(201, 203, 207)'
                       ],
-                      borderWidth: 1
+                      borderWidth: 1,
+                      tension:0.1,
+                    },{
+                      label: 'var sal',
+                      data: {{ salary_var|safe }},
+                      backgroundColor: [
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(255, 159, 64, 0.2)',
+                      'rgba(255, 205, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(201, 203, 207, 0.2)'
+                    ],
+                    borderColor: [
+                      'rgb(255, 99, 132)',
+                      'rgb(255, 159, 64)',
+                      'rgb(255, 205, 86)',
+                      'rgb(75, 192, 192)',
+                      'rgb(54, 162, 235)',
+                      'rgb(153, 102, 255)',
+                      'rgb(201, 203, 207)'
+                    ],
+                    borderWidth: 1,
+                    tension:0.1,
 
-                      }
+                    }
+                    ]
+                  },
+                  options: {
+                    maintainAspectRatio:false,
+
+                    scales: {
+                      y: {
+                        
+                        beginAtZero: true,
+                      },
+                     
+                    }
+                  }
+                });
+                const containerbody1 = document.querySelector('.containerbody1');
+                const totallabels2=myChart2.data.labels.length
+                if(totallabels2 > 5){
+                  const newwidth2=3000+((totallabels2-5)*5)
+                  containerbody1.style.width=`${newwidth2}px`;
+                }  
+            </script>
+            <!-- End Bar CHart -->
+
+          </div>
+        </div>
+      </div>
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Line Chart</h5>
+              <!-- Line Chart -->
+              <div class="container1">
+                <div class="containerbody2">
+                  <canvas id="lineChart" style="max-height: 400px;"></canvas>
+                </div>
+              </div>
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <script>
+                
+              var ctx = document.getElementById('lineChart').getContext('2d');
+              var myChart1 = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                      labels: {{ sal_time|safe }},
+                datasets: [{
+                    label: 'fix salary',
+                    data:{{ salary_var|safe }},
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                      },{
+                        label: 'var sal',
+                        data: {{ salary_fix|safe }},
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                      },
                       ]
                     },
                     options: {
+                      maintainAspectRatio:false,
                       scales: {
                         y: {
                           beginAtZero: true
-                        }
+                        },
                       }
                     }
                   });
-            
+           
+                  const containerbody2 = document.querySelector('.containerbody2');
+                  // Your other JavaScript code here
+                  const totallabels=myChart1.data.labels.length
+                  if(totallabels > 5){
+                    const newwidth=3000+((totallabels-5)*5)
+                    containerbody2.style.width=`${newwidth}px`;
+                  } 
+
               </script>
-              <!-- End Bar CHart -->
+              <!-- End Line CHart -->
 
             </div>
           </div>
-        </div>
+        </div> 
+
+        
 
         <div class="col-lg-6">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Pie Chart</h5>
+              <div class="container1">
+                <div class="containerbody3">
+                  <canvas id="pieChart" style="max-height: 400px;"></canvas>
+                </div>
+              </div>
 
               <!-- Pie Chart -->
-              <canvas id="pieChart" style="max-height: 400px;"></canvas>
+              
               <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
               <script>
                 var ctx = document.getElementById('pieChart').getContext('2d');
@@ -180,12 +218,16 @@
                     data: {
                       labels: {{ sal_time|safe }},
                 datasets: [{
-                    label: 'salary var',
+                    label: ' var salary',
                     data: {{ salary_var|safe }},
                         backgroundColor: [
-                          'rgb(255, 99, 132)',
-                          'rgb(54, 162, 235)',
-                          'rgb(255, 205, 86)'
+                        'rgba(255, 99, 132)',
+                        'rgba(255, 159, 64)',
+                        'rgba(255, 205, 86)',
+                        'rgba(75, 192, 192)',
+                        'rgba(54, 162, 235)',
+                        'rgba(153, 102, 255)',
+                        'rgba(201, 203, 207 )'
                         ],
                         hoverOffset: 4
                       },{
@@ -193,8 +235,12 @@
                         data: {{ salary_fix|safe }},
                         backgroundColor: [
                         'rgb(255, 99, 132)',
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 205, 86)'
+                      'rgb(255, 159, 64)',
+                      'rgb(255, 205, 86)',
+                      'rgb(75, 192, 192)',
+                      'rgb(54, 162, 235)',
+                      'rgb(153, 102, 255)',
+                      'rgb(201, 203, 207)'
                       ],
                       hoverOffset: 4
                       }
@@ -215,7 +261,12 @@
               <h5 class="card-title">Doughnut Chart</h5>
 
               <!-- Doughnut Chart -->
-              <canvas id="doughnutChart" style="max-height: 400px;"></canvas>
+              <div class="container1">
+                <div class="containerbody4">
+                  <canvas id="doughnutChart" style="max-height: 400px;"></canvas>
+                </div>
+              </div>
+              
               <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
               <script>
                 var ctx = document.getElementById('doughnutChart').getContext('2d');
@@ -224,7 +275,7 @@
                     data: {
                       labels: {{ sal_time|safe }},
                 datasets: [{
-                    label: 'salary var',
+                    label: ' var salary',
                     data: {{ salary_var|safe }},
                         backgroundColor: [
                           'rgb(255, 99, 132)',
@@ -257,9 +308,13 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Radar Chart</h5>
-
+              <div class="container1">
+                <div class="containerbody5">
+                  <canvas id="radarChart" style="max-height: 300px;"></canvas>
+                </div>
+              </div>
               <!-- Radar Chart -->
-              <canvas id="radarChart" style="max-height: 400px;"></canvas>
+              
               <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
               <script>
                 var ctx = document.getElementById('radarChart').getContext('2d');
@@ -268,7 +323,7 @@
                     data: {
                       labels: {{ sal_time|safe }},
                 datasets: [{
-                    label: 'salary var',
+                    label: ' var salary',
                     data: {{ salary_var|safe }},
                         fill: true,
                         backgroundColor: 'rgba(255, 99, 132, 0.2)',
@@ -310,48 +365,82 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Polar Area Chart</h5>
-
               <!-- Polar Area Chart -->
-              <canvas id="polarAreaChart" style="max-height: 400px;"></canvas>
+              <div class="container1">
+                <div class="containerbody6">
+                  <canvas id="polarAreaChart" style="max-height: 400px;"></canvas>
+                </div>
+              </div>
               <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
               <script>
                 var ctx = document.getElementById('polarAreaChart').getContext('2d');
-                var myChart = new Chart(ctx, {
-                    type: 'polarArea',
-                    data: {
-                      labels: {{ sal_time|safe }},
-                datasets: [{
-                    label: 'salary var',
-                    data: {{ salary_var|safe }},
-                        backgroundColor: [
-                          'rgb(255, 99, 132)',
-                          'rgb(75, 192, 192)',
-                          'rgb(255, 205, 86)',
-                          'rgb(201, 203, 207)',
-                          'rgb(54, 162, 235)'
-                        ]
-                      },
-                      {
-                        label: 'fix sal',
-                        data: {{ salary_fix|safe }},
-                        backgroundColor: [
+                var myPolarAreaChart = new Chart(ctx, {
+                  type: 'polarArea',
+                  data: {
+                    labels: {{ sal_time|safe }},
+                    datasets: [{
+                      categoryPercentage: 0.1,
+
+                   label: 'fix sal',
+                  data: {{ salary_fix|safe }},
+                      backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)'
+                      ],
+                      borderColor: [
                         'rgb(255, 99, 132)',
-                        'rgb(75, 192, 192)',
+                        'rgb(255, 159, 64)',
                         'rgb(255, 205, 86)',
-                        'rgb(201, 203, 207)',
-                        'rgb(54, 162, 235)'
-                      ]
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
+                      ],
+                      borderWidth: 1,
+                      tension:0.1,
+                    },{
+                      label: 'var sal',
+                      data: {{ salary_var|safe }},
+                      backgroundColor: [
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(255, 159, 64, 0.2)',
+                      'rgba(255, 205, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(201, 203, 207, 0.2)'
+                    ],
+                    borderColor: [
+                      'rgb(255, 99, 132)',
+                      'rgb(255, 159, 64)',
+                      'rgb(255, 205, 86)',
+                      'rgb(75, 192, 192)',
+                      'rgb(54, 162, 235)',
+                      'rgb(153, 102, 255)',
+                      'rgb(201, 203, 207)'
+                    ],
+                    borderWidth: 1,
+                    tension:0.1,
 
-                      }]
-                    }
-                  });
-
+                    }]
+                  },
+                  options: {
+                    maintainAspectRatio: false
+                  }
+                });
+        
+                
               </script>
               <!-- End Polar Area Chart -->
-
             </div>
           </div>
         </div>
+        
 
         <div class="col-lg-6">
           <div class="card">
@@ -359,7 +448,12 @@
               <h5 class="card-title">Stacked Bar Chart</h5>
 
               <!-- Stacked Bar Chart -->
-              <canvas id="stakedBarChart" style="max-height: 400px;"></canvas>
+              <div class="container1">
+                <div class="containerbody7">
+                  <canvas id="stakedBarChart" style="max-height: 400px;"></canvas>
+                </div>
+              </div>
+              
               <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
               <script>
                 var ctx = document.getElementById('stakedBarChart').getContext('2d');
@@ -368,7 +462,7 @@
                     data: {
                       labels: {{ sal_time|safe }},
                 datasets: [{
-                    label: 'salary var',
+                    label: ' var salary',
                     data: {{ salary_var|safe }},
                           backgroundColor: 'rgb(255, 99, 132)',
                         },
@@ -380,12 +474,7 @@
                       ]
                     },
                     options: {
-                      plugins: {
-                        title: {
-                          display: true,
-                          text: 'Chart.js Bar Chart - Stacked'
-                        },
-                      },
+                    
                       responsive: true,
                       scales: {
                         x: {
@@ -411,7 +500,12 @@
               <h5 class="card-title">Bubble Chart</h5>
 
               <!-- Bubble Chart -->
-              <canvas id="bubbleChart" style="max-height: 400px;"></canvas>
+              <div class="container1">
+                <div class="containerbody8">
+                  <canvas id="bubbleChart" style="max-height: 400px;"></canvas>
+                </div>
+              </div>
+              
               <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
               <script>
                 var ctx = document.getElementById('bubbleChart').getContext('2d');
@@ -420,7 +514,7 @@
                     data: {
                       labels: {{ sal_time|safe }},
                 datasets: [{
-                    label: 'salary var',
+                    label: ' var salary',
                     data: {{ salary_var|safe }},
                           borderColor: 'rgb(255, 99, 132)',
                           backgroundColor: 'rgba(255, 99, 132, 0.5)'
@@ -439,10 +533,7 @@
                         legend: {
                           position: 'top',
                         },
-                        title: {
-                          display: true,
-                          text: 'Chart.js Bubble Chart'
-                        }
+                        
                       }
                     }
                   });
@@ -458,4 +549,30 @@
     </section>
 
   </main><!-- End #main -->
+  <style>
+    .container1 {
+      width: 100%;
+      max-width:100%;
+      overflow-x:scroll;
+    }
+    .containerbody1 {
+      height: auto;
+    }
+    .containerbody2 {
+      height: auto;
+    }.containerbody3 {
+      height: auto;
+    }.containerbody4 {
+      height: auto;
+    }.containerbody5 {
+      height: auto;
+    }.containerbody6 {
+      height: auto;
+    }.containerbody7 {
+      height: auto;
+    }.containerbody8 {
+      height: auto;
+    }
+  </style>
+
 {% endblock body%}

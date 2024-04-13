@@ -335,7 +335,8 @@ def salary(request, username):
     #     fix_salary = 1500
     #     var_salary=random.randint(0,1000)
     #     start_time=start_time + timedelta(days=1)
-    #     income1 = Salary(user=username, fix_salary=fix_salary, var_salary=var_salary, start_time=start_time, totalsalary=int(var_salary)+int(fix_salary), time=0)
+    #     time=i
+    #     income1 = Salary(user=username, fix_salary=fix_salary, var_salary=var_salary, start_time=start_time, totalsalary=int(var_salary)+int(fix_salary), time=time)
     #     income1.save()
     if request.method == "POST":
         fix_salary = request.POST["fix_salary"]
@@ -373,7 +374,8 @@ def expense(request, username):
     #     fix_expense = 1000
     #     var_expense=random.randint(0,400)
     #     start_time=start_time + timedelta(days=1)
-    #     expense1 = Expense(user=username, fix_expense=fix_expense, var_expense=var_expense, start_time=start_time, totalexpense=int(var_expense)+int(fix_expense), time=0)
+    #     time = i
+    #     expense1 = Expense(user=username, fix_expense=fix_expense, var_expense=var_expense, start_time=start_time, totalexpense=int(var_expense)+int(fix_expense), time=time)
     #     expense1.save()
 
     if request.method == "POST":
