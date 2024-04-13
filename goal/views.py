@@ -14,7 +14,7 @@ from .models import *
 from .serializers import *
 from django.shortcuts import render
 from datetime import datetime,timedelta,date
-import calendar
+import calendar,random
 from django.db.models import Sum
 count=1
 # from .models import Profile
@@ -330,6 +330,13 @@ def salary(request, username):
     salary = Salary.objects.filter(user=username).order_by('-start_time')
     # last_salary = expenses.first()
     # salary = Salary.objects.filter(user=username).first()
+    # start_time=datetime(2023, 4, 1)
+    # for i in range (365):
+    #     fix_salary = 1500
+    #     var_salary=random.randint(0,1000)
+    #     start_time=start_time + timedelta(days=1)
+    #     income1 = Salary(user=username, fix_salary=fix_salary, var_salary=var_salary, start_time=start_time, totalsalary=int(var_salary)+int(fix_salary), time=0)
+    #     income1.save()
     if request.method == "POST":
         fix_salary = request.POST["fix_salary"]
         var_salary = request.POST["var_salary"]
@@ -361,6 +368,13 @@ def expense(request, username):
     # Fetch the latest expense data if it exists
     expenses = Expense.objects.filter(user=username).order_by('-start_time')
     last_expense = expenses.first()
+    # start_time=datetime(2023, 4, 1)
+    # for i in range (365):
+    #     fix_expense = 1000
+    #     var_expense=random.randint(0,400)
+    #     start_time=start_time + timedelta(days=1)
+    #     expense1 = Expense(user=username, fix_expense=fix_expense, var_expense=var_expense, start_time=start_time, totalexpense=int(var_expense)+int(fix_expense), time=0)
+    #     expense1.save()
 
     if request.method == "POST":
         fix_expense = request.POST.get("fix_expense", 0)
@@ -387,7 +401,6 @@ def expense(request, username):
         expense.save()
 
         messages.success(request, "Expense updated successfully" if "expense_id" in request.POST else "Expense entered successfully")
-
     elif last_expense is not None and date.today() < last_expense.start_time + timedelta(days=1):
         form_enabled = False
         messages.success(request, "You have entered your Expense for today.")
