@@ -637,6 +637,34 @@ def goal(request,username):
 #     }
 #     return JsonResponse(data)
 
+def edit(request, username):
+    if request.method == "POST":
+        type = request.POST["type"]
+        fix_amount = request.POST["fix_amount"]
+        var_amount = request.POST["var_amount"]
+        date = request.POST["date"]
+        if type=="Income":
+            income= Salary.objects.filter(user=username, start_time=date).first()
+            income.fix_salary=fix_amount
+            income.var_salary=var_amount
+            income.totalsalary=int(fix_amount)+int(var_amount)
+            income.save()
+            messages.success(request, "Income Edited Successfully")
+            return HttpResponseRedirect(request.path_info)
+        if type=="Expense":
+            expense=Expense.objects.filter(user=username, start_time=date).first()
+            expense.fix_expense=fix_amount
+            expense.var_expense=var_amount
+            expense.totalexpense=int(var_amount)+int(fix_amount)
+            expense.save()
+            messages.success(request, "Expense Edited Successfully")
+            return HttpResponseRedirect(request.path_info)
+
+
+
+    else:
+        return render(request, "edit.html")
+
 
 class salDataView(APIView):
     def get(self, request):
